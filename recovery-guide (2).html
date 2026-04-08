@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recovery Guide — Sober Sidekick</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#7C6FCD;--p2:#EAE7F8;--p3:#534AB7;--p4:#3C3489;
+  --g:#3B6D11;--gl:#EAF3DE;--gd:#27500A;
+  --teal:#0F6E56;--tl:#E1F5EE;
+  --bd:#E4E1F0;--bg:#F7F6FC;--wh:#fff;--tx:#1A1823;--mt:#6B6882;
+  --serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden}
+.screen{display:none}
+#s-intro.on{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem 1rem;text-align:center}
+#s-q.on{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem 1rem}
+#s-guide.on{display:flex;flex-direction:column;min-height:100vh}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.8rem 1.75rem;border-radius:50px;font-family:var(--sans);font-size:.9rem;font-weight:600;cursor:pointer;border:2px solid var(--tx);background:var(--tx);color:var(--wh);transition:all .18s}
+.btn:hover{opacity:.85}.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--tx);border:2px solid var(--bd)}.btn.ghost:hover{border-color:var(--p);color:var(--p)}
+
+/* INTRO */
+.brand{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--p);margin-bottom:1.25rem}
+.hero{font-family:var(--serif);font-size:2.5rem;line-height:1.15;margin-bottom:.75rem}
+.hero em{color:var(--p);font-style:italic}
+.sub{font-size:1rem;color:var(--mt);margin-bottom:2rem;line-height:1.6;max-width:440px}
+.ms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.875rem;max-width:400px;width:100%;margin-bottom:1.875rem}
+.ms-card{background:var(--wh);border:2px solid var(--bd);border-radius:16px;padding:1.4rem 1rem;cursor:pointer;transition:all .18s;text-align:center}
+.ms-card:hover{border-color:var(--p);transform:translateY(-2px)}.ms-card.sel{border-color:var(--p3);background:var(--p2)}
+.ms-n{font-family:var(--serif);font-size:2.4rem;color:var(--p);line-height:1}.ms-l{font-size:.78rem;color:var(--mt);margin-top:2px}.ms-t{font-size:.7rem;color:var(--p);font-weight:600;margin-top:5px;letter-spacing:.04em}
+
+/* QUESTIONS */
+.q-wrap{max-width:540px;width:100%}
+.prog-bar{height:4px;background:var(--bd);border-radius:99px;margin-bottom:1.875rem;overflow:hidden}
+.prog-fill{height:100%;background:var(--p);border-radius:99px;transition:width .3s ease}
+.q-num{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--p);margin-bottom:.4rem}
+.q-text{font-family:var(--serif);font-size:1.6rem;color:var(--tx);margin-bottom:1.25rem;line-height:1.3}
+.multi-note{font-size:.78rem;color:var(--mt);font-style:italic;margin-bottom:.625rem;margin-top:-.5rem}
+.opt-list{display:grid;gap:.45rem;margin-bottom:1.375rem}
+.opt{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;border:2px solid var(--bd);border-radius:12px;background:var(--wh);cursor:pointer;font-family:var(--sans);font-size:.875rem;color:var(--tx);text-align:left;transition:all .15s;width:100%}
+.opt:hover{border-color:var(--p)}.opt.sel{border-color:var(--p3);background:var(--p2);color:var(--p4);font-weight:500}
+.opt-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--bd);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .15s}
+.opt.sel .opt-dot{background:var(--p3);border-color:var(--p3);color:#fff}
+.q-nav{display:flex;justify-content:space-between;align-items:center}
+
+/* GUIDE */
+.g-hdr{background:var(--wh);border-bottom:1px solid var(--bd);padding:1rem 1.5rem;position:sticky;top:0;z-index:200}
+.g-hdr-in{max-width:820px;margin:0 auto}
+.g-row{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.75rem}
+.g-title{font-family:var(--serif);font-size:1.3rem;line-height:1.2}
+.g-prog-wrap{text-align:right;flex-shrink:0}
+.g-prog-n{font-size:1.15rem;font-weight:600;color:var(--p)}.g-prog-l{font-size:.7rem;color:var(--mt)}
+.tabs{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px;width:fit-content}
+.tab{padding:.38rem .95rem;border:none;border-radius:8px;font-size:.8rem;font-weight:500;cursor:pointer;color:var(--mt);background:transparent;font-family:var(--sans);transition:all .15s}
+.tab.on{background:var(--wh);color:var(--p3);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.g-body{flex:1;padding:1.5rem;overflow-y:auto}
+.g-body-in{max-width:820px;margin:0 auto}
+.panel{display:none}.panel.on{display:block}
+
+/* CALENDAR */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem;flex-wrap:wrap;gap:.5rem}
+.cal-title{font-family:var(--serif);font-size:1.15rem}
+.cal-legend{display:flex;gap:.875rem;font-size:.75rem;color:var(--mt);align-items:center;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:.375rem}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.dow-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px}
+.dow-cell{text-align:center;font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mt);padding:.2rem 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-cell{background:var(--wh);border:1.5px solid var(--bd);border-radius:10px;padding:.5rem .45rem .45rem;cursor:pointer;transition:all .18s;min-height:72px;display:flex;flex-direction:column;gap:3px;position:relative;overflow:hidden}
+.cal-cell::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:transparent;transition:background .15s}
+.cal-cell:hover{border-color:var(--p);box-shadow:0 3px 10px rgba(124,111,205,.14);transform:translateY(-1px)}
+.cal-cell:hover::after{background:var(--p)}
+.cal-cell.done{background:var(--gl);border-color:#9FE1CB}
+.cal-cell.done::after{background:var(--g)}
+.cal-cell.empty{background:transparent;border:none;cursor:default;pointer-events:none;min-height:0}
+.cal-num{font-size:.7rem;font-weight:600;color:var(--mt);line-height:1}
+.cal-cell.done .cal-num{color:var(--gd)}
+.cal-task-lbl{font-size:.65rem;color:var(--tx);line-height:1.3;flex:1;overflow:hidden}
+.cal-cell.done .cal-task-lbl{color:var(--g)}
+.cal-done-tick{position:absolute;top:4px;right:5px;font-size:.65rem;color:var(--g);font-weight:700;display:none}
+.cal-cell.done .cal-done-tick{display:block}
+.cal-wk-lbl{grid-column:1/-1;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);margin-top:.625rem;margin-bottom:-.1rem;display:flex;align-items:center;gap:.5rem}
+.cal-wk-lbl::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,24,35,.48);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--wh);border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 24px 64px rgba(26,24,35,.24)}
+.modal-hdr{padding:1.125rem 1.375rem 1rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;position:sticky;top:0;background:var(--wh);z-index:10;border-bottom:1px solid var(--bd)}
+.m-day-lbl{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p);margin-bottom:.3rem}
+.m-title{font-family:var(--serif);font-size:1.25rem;line-height:1.3;color:var(--tx)}
+.m-close{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mt);flex-shrink:0;font-family:var(--sans);font-size:.9rem;transition:all .15s;padding:0}
+.m-close:hover{border-color:var(--p);color:var(--p)}
+.m-body{padding:1.125rem 1.375rem 1.375rem}
+.why-l{font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p);margin-bottom:.3rem}
+.why-t{font-size:.875rem;color:var(--mt);line-height:1.7;margin-bottom:.875rem}
+.acct-chip{display:flex;align-items:flex-start;gap:.45rem;background:var(--bg);border-radius:9px;padding:.55rem .85rem;font-size:.8rem;color:var(--tx);margin-bottom:1rem;border:1px solid var(--bd)}
+.alt-lbl{font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mt);margin:0 0 .5rem}
+.alt-opt{display:flex;align-items:flex-start;gap:.6rem;padding:.65rem .875rem;border:1.5px solid var(--bd);border-radius:10px;cursor:pointer;margin-bottom:.4rem;transition:all .15s;background:var(--bg);width:100%;text-align:left}
+.alt-opt:hover{border-color:var(--p)}.alt-opt.picked{border-color:var(--p3);background:var(--p2)}
+.alt-radio{width:13px;height:13px;border-radius:50%;border:2px solid var(--bd);flex-shrink:0;margin-top:3px;transition:all .15s}
+.alt-opt.picked .alt-radio{background:var(--p3);border-color:var(--p3)}
+.alt-main{font-size:.84rem;font-weight:500;color:var(--tx);line-height:1.35}
+.alt-why{font-size:.76rem;color:var(--mt);margin-top:2px;line-height:1.5}
+.deepen-btn{display:flex;align-items:center;gap:.625rem;margin:1rem 0 0;padding:.7rem .9rem;border-radius:12px;border:1.5px dashed var(--teal);cursor:pointer;background:transparent;font-family:var(--sans);font-size:.84rem;color:var(--teal);font-weight:500;transition:all .18s;width:100%;text-align:left}
+.deepen-btn:hover{background:var(--tl)}.deepen-btn.open{background:var(--tl);border-style:solid}
+.d-icon{width:22px;height:22px;border-radius:50%;background:var(--tl);border:1.5px solid var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem;color:var(--teal);font-weight:700}
+.deepen-panel{display:none;margin-top:.75rem;border-radius:12px;background:var(--tl);border:1.5px solid var(--teal);padding:1rem 1.125rem}
+.deepen-panel.open{display:block}
+.dp-section{font-size:.68rem;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.dp-text{font-size:.84rem;color:var(--tx);line-height:1.65;margin-bottom:.875rem;padding-left:.75rem;border-left:2px solid var(--teal)}
+.dp-prompt{background:rgba(255,255,255,.75);border-radius:8px;padding:.55rem .8rem;font-size:.8rem;color:var(--gd);margin-bottom:.4rem;font-style:italic;line-height:1.6}
+.dp-challenge{font-size:.84rem;color:var(--teal);line-height:1.65;font-weight:500;margin-top:.25rem;padding-left:.75rem;border-left:2px solid var(--teal)}
+.modal-footer{padding:.875rem 1.375rem;border-top:1px solid var(--bd);display:flex;gap:.625rem;align-items:center;position:sticky;bottom:0;background:var(--wh)}
+.done-btn{flex:1;padding:.6rem 1rem;border-radius:50px;border:2px solid var(--g);background:transparent;color:var(--g);font-family:var(--sans);font-size:.85rem;font-weight:600;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.done-btn:hover,.done-btn.on{background:var(--g);color:#fff}
+.nav-btn{padding:.6rem .9rem;border-radius:50px;border:1.5px solid var(--bd);background:transparent;color:var(--mt);font-family:var(--sans);font-size:.8rem;cursor:pointer;transition:all .15s;white-space:nowrap}
+.nav-btn:hover{border-color:var(--p);color:var(--p)}.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* WEEKLY / MONTHLY */
+.wk-sep{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);margin:1.125rem 0 .5rem;display:flex;align-items:center;gap:.5rem}
+.wk-sep::after{content:'';flex:1;height:1px;background:var(--bd)}
+.w-card{background:var(--wh);border:1.5px solid var(--bd);border-radius:13px;margin-bottom:.5rem;overflow:hidden}
+.w-card.done-w{border-color:var(--g);opacity:.85}
+.w-hdr{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;cursor:pointer;user-select:none}
+.w-chk{width:20px;height:20px;border-radius:50%;border:2px solid var(--bd);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;background:var(--wh)}
+.w-chk.on{background:var(--gl);border-color:var(--g)}
+.w-name{font-size:.875rem;font-weight:500;flex:1}
+.w-arr{font-size:.65rem;color:var(--mt);transition:transform .2s}
+.w-card.exp .w-arr{transform:rotate(180deg)}
+.w-body{display:none;padding:.25rem 1rem 1rem;border-top:1px solid var(--bd)}
+.w-card.exp .w-body{display:block}
+.mo-wrap{background:linear-gradient(135deg,#EAE7F8,#F0EEF9);border:1.5px solid #C4BEE8;border-radius:18px;padding:1.5rem}
+.badge{display:inline-flex;align-items:center;gap:4px;background:var(--p3);color:#fff;font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:99px;margin-bottom:.75rem}
+.mo-title{font-family:var(--serif);font-size:1.3rem;margin-bottom:.75rem}
+.acct{display:flex;align-items:flex-start;gap:.5rem;background:rgba(255,255,255,.65);border-radius:10px;padding:.55rem .875rem;font-size:.82rem;margin-bottom:.875rem}
+.commit-btn{padding:.6rem 1.375rem;border-radius:50px;border:2px solid var(--g);background:transparent;color:var(--g);font-family:var(--sans);font-size:.85rem;font-weight:600;cursor:pointer;transition:all .18s}
+.commit-btn:hover,.commit-btn.done{background:var(--g);color:#fff}
+
+@media(max-width:600px){
+  .hero{font-size:1.85rem}.ms-grid{grid-template-columns:1fr}
+  .g-hdr{padding:.75rem 1rem}.g-body{padding:.875rem}
+  .cal-cell{min-height:56px}.cal-task-lbl{display:none}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:18px 18px 0 0;max-height:92vh}
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="s-intro" class="screen on">
+  <img src="data:image/avif;base64,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" alt="Sober Sidekick" style="height:52px;width:auto;margin-bottom:1rem;object-fit:contain">
+<div class="brand">Sober Sidekick</div>
+  <h1 class="hero">Guide for the first<br><em>___ days</em> of recovery</h1>
+  <p class="sub">Answer 7 quick questions and get a personalized calendar of daily challenges, weekly focuses, and a monthly intention — all built around your journey.</p>
+  <div class="ms-grid">
+    <div class="ms-card" onclick="pickMs(30,this)"><div class="ms-n" style="font-size:1.3rem;line-height:1.2">Days<br>1–30</div><div class="ms-t" style="margin-top:6px">Foundation</div><div class="ms-l" style="margin-top:3px">Starting out</div></div>
+    <div class="ms-card" onclick="pickMs(60,this)"><div class="ms-n" style="font-size:1.3rem;line-height:1.2">Days<br>31–60</div><div class="ms-t" style="margin-top:6px">Building</div><div class="ms-l" style="margin-top:3px">Growing stronger</div></div>
+    <div class="ms-card" onclick="pickMs(90,this)"><div class="ms-n" style="font-size:1.3rem;line-height:1.2">Days<br>61–90</div><div class="ms-t" style="margin-top:6px">Momentum</div><div class="ms-l" style="margin-top:3px">Coming into your own</div></div>
+  </div>
+  <button class="btn" id="intro-btn" disabled onclick="startQ()">Build my plan &rarr;</button>
+  <p style="font-size:.76rem;color:var(--mt);margin-top:.75rem">7 questions &middot; 2 minutes &middot; stays in your browser</p>
+</div>
+
+<!-- QUESTIONS -->
+<div id="s-q" class="screen">
+  <div class="q-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="qprog"></div></div>
+    <div class="q-num" id="qnum"></div>
+    <div class="q-text" id="qtext"></div>
+    <div class="multi-note" id="qmulti" style="display:none">Select all that apply</div>
+    <div class="opt-list" id="qopts"></div>
+    <div class="q-nav">
+      <button class="btn ghost" id="qback" onclick="prevQ()">&#8592; Back</button>
+      <button class="btn" id="qnext" onclick="nextQ()">Continue &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div id="s-guide" class="screen">
+  <div class="g-hdr">
+    <div class="g-hdr-in">
+      <div class="g-row">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <img src="data:image/avif;base64,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" alt="Sober Sidekick" style="height:32px;width:auto;object-fit:contain;flex-shrink:0">
+          <div><div class="g-title" id="g-title"></div><div style="font-size:.76rem;color:var(--mt);margin-top:2px" id="g-sub"></div></div>
+        </div>
+        <div class="g-prog-wrap"><div class="g-prog-n" id="g-total"></div><div class="g-prog-l">tasks done</div></div>
+      </div>
+      <div class="tabs">
+        <button class="tab on" onclick="showTab('daily',this)">Calendar</button>
+        <button class="tab" onclick="showTab('weekly',this)">Weekly</button>
+        <button class="tab" onclick="showTab('monthly',this)">Monthly</button>
+      </div>
+    </div>
+  </div>
+  <div class="g-body">
+    <div class="g-body-in">
+      <div class="panel on" id="panel-daily"></div>
+      <div class="panel" id="panel-weekly"></div>
+      <div class="panel" id="panel-monthly"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-hdr">
+
+<!-- COMPLETION OVERLAY -->
+<div id="completion-overlay" style="display:none;position:fixed;inset:0;background:linear-gradient(160deg,#f0eeff 0%,#e8f4ff 50%,#eef7e8 100%);z-index:200;overflow-y:auto">
+  <div style="max-width:520px;margin:0 auto;padding:3rem 1.5rem 4rem;text-align:center;display:flex;flex-direction:column;align-items:center;min-height:100vh;justify-content:center">
+    <div id="co-confetti" style="font-size:2.5rem;margin-bottom:1rem;letter-spacing:.1em"></div>
+    <div style="font-family:'DM Serif Display',serif;font-size:2.6rem;line-height:1.1;color:#2d2555;margin-bottom:1rem" id="co-heading"></div>
+    <div style="font-size:1.05rem;color:#4a4570;line-height:1.65;margin-bottom:.75rem;max-width:400px" id="co-body"></div>
+    <div style="font-size:.88rem;color:#7c6fcd;font-style:italic;margin-bottom:2.5rem;max-width:380px" id="co-sub"></div>
+    <button id="co-next-btn" onclick="advanceToNextSegment()" style="padding:1rem 2.5rem;border-radius:50px;border:none;background:linear-gradient(135deg,#7c6fcd,#534ab7);color:#fff;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(124,111,205,.35);margin-bottom:1.25rem;transition:transform .15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''"></button>
+    <button onclick="dismissCompletion()" style="background:none;border:none;color:#9990c0;font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;text-decoration:underline">Stay on this section</button>
+  </div>
+</div>
+      <div><div class="m-day-lbl" id="m-lbl"></div><div class="m-title" id="m-title"></div></div>
+      <button class="m-close" onclick="closeModalBtn()">&#10005;</button>
+    </div>
+    <div class="m-body" id="m-body"></div>
+    <div class="modal-footer">
+      <button class="nav-btn" id="m-prev" onclick="modalNav(-1)">&#8592; Prev</button>
+      <button class="done-btn" id="m-done" onclick="togDayModal()"></button>
+      <button class="nav-btn" id="m-next" onclick="modalNav(1)">Next &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── QUESTIONS (milestone-aware) ─────────────────────
+function getQuestions(ms){
+  const q2_30={id:'stage',text:'Where are you right now in your journey?',type:'one',
+    opts:['Just beginning — this is day one','Restarting after a relapse','A few weeks in and building momentum','I\'ve had stretches of sobriety before']};
+  const q2_60={id:'stage',text:'How did your first 30 days go?',type:'one',
+    opts:['Stronger than I expected — I\'m ready for more','Steady but hard — I\'m building day by day','I had slips but I kept coming back','I\'m still finding my footing honestly']};
+  const q2_90={id:'stage',text:'What\'s shifted most in you over the past 60 days?',type:'one',
+    opts:['My mindset — I see myself differently now','My relationships — people are showing up','My routines — I have real structure now','My sense of purpose — I know why I\'m doing this']};
+  const q2 = ms===60?q2_60:ms===90?q2_90:q2_30;
+  return [
+    {id:'sub',text:'What are you in recovery from?',type:'one',
+     opts:['Alcohol','Opioids or pain medications','Stimulants (meth, cocaine, etc.)','Cannabis','Multiple substances','A behavioral addiction (gambling, food, screens, etc.)']},
+    q2,
+    {id:'hard',text:'What feels hardest right now?',type:'one',
+     opts:['Managing cravings and urges','Loneliness and isolation','Building structure and routine','Sitting with emotions without numbing','Repairing relationships I\'ve hurt','Finding meaning or a reason to keep going']},
+    {id:'joy',text:'What brings you joy or peace?',type:'many',
+     opts:['Being in nature or outdoors','Creative expression — art, music, writing','Movement and physical fitness','Spiritual or mindfulness practice','Helping and connecting with people','Learning and reading','Animals and pets']},
+    {id:'sup',text:'What does your support system look like right now?',type:'one',
+     opts:['Strong — family and close friends show up','I have a sponsor or recovery mentor','I\'m in therapy or a treatment program','I go to meetings or a recovery community','I\'m building it from scratch','Mostly on my own right now']},
+    {id:'goal',text:'What matters most to you this season?',type:'many',
+     opts:['Physical health and more energy','Rebuilding trust in relationships','Mental clarity and emotional peace','Career, purpose, or financial stability','Spiritual growth','Rediscovering who I am and what brings me joy']},
+    {id:'time',text:'When do you feel most motivated or clear-headed?',type:'one',
+     opts:['Morning — I do my best work early','Midday or afternoon','Evening when things settle','It really varies day to day']}
+  ];
+}
+
+// ── TASK LIBRARY ───────────────────────────────────
+const DAILY_BANK=[
+// WEEK 1 — Stabilize
+{w:1,title:'Write down three reasons you chose today',
+ why:'Naming your "why" anchors you on hard days and gives your recovery a foundation beneath the feelings. When everything else feels uncertain, your reasons are yours to return to.',
+ acct:'Keep the list somewhere you\'ll see it tomorrow morning — phone lock screen, bathroom mirror, wherever.',
+ tags:['meaning','grounding','all'],
+ deepen:{practice:'Spend 20 minutes writing about the moment you decided to change. What did that moment feel like? What were you afraid of? What were you hoping for?',prompts:['What does my life look like one year from now in recovery?','What would I tell someone I love if they were where I am right now?','What does the word "freedom" mean to me?'],challenge:'Do this reflection again on Day 15 and compare. Notice what has shifted.'},
+ alts:[{title:'Record a voice memo about why today matters',why:'Speaking it aloud makes it real in a different way — it\'s harder to dismiss your own voice.'},{title:'Tell one safe person why you chose today',why:'Accountability starts with one honest sentence shared with one person who cares.'}]},
+
+{w:1,title:'Drink a full glass of water before anything else',
+ why:'Hydration is the simplest physical reset your body gets. Early recovery taxes your nervous system — water is a tiny act of self-care that costs nothing and starts a chain of better choices.',
+ acct:'Set a glass by your bed tonight so it\'s there when you wake.',
+ tags:['physical','structure','all'],
+ deepen:{practice:'Research the physical effects of your substance on the body and what recovery looks like biologically. Understanding the science turns "feeling bad" into "my body is healing."',prompts:['What is one physical feeling I want to have back?','How has my body been trying to tell me something for a long time?'],challenge:'Drink a glass of water first thing every morning for 7 straight days. Track how it affects your energy and mood.'},
+ alts:[{title:'Make a warm drink and sit quietly with it for 5 minutes',why:'A morning ritual — even a simple one — signals to your brain that today has a shape.'},{title:'Step outside for 5 minutes of fresh air first thing',why:'Natural light in the morning resets your circadian rhythm and can lift mood almost immediately.'}]},
+
+{w:1,title:'Map your three highest-risk times of day',
+ why:'Cravings spike in predictable windows — boredom, transition times, evenings. Knowing yours lets you plan instead of react. A plan made now is worth ten made in the middle of a craving.',
+ acct:'Write each risk window down. Next to each, write one specific thing you\'ll do instead.',
+ tags:['cravings','structure','all'],
+ deepen:{practice:'Build a full craving response plan: a written list of at least 6 things you will do when a craving hits, ordered from easiest to hardest. Keep it on your phone.',prompts:['What is the first sign that a craving is building in my body?','Who can I call in under 60 seconds?'],challenge:'The next time a craving hits, open the plan and do the first thing on it before anything else. Then write one sentence about what happened.'},
+ alts:[{title:'Track your mood and cravings every 3 hours today',why:'A single day of honest tracking reveals patterns you can\'t see any other way.'},{title:'Ask someone who knows you when they think you\'re most vulnerable',why:'Outside perspective can surface patterns you\'ve normalized or missed.'}]},
+
+{w:1,title:'Take a 10-minute walk — no phone, no podcast',
+ why:'Movement releases dopamine and serotonin in ways that begin to repair the brain\'s reward system. The silence makes space for thoughts to settle. You don\'t have to solve anything — just move.',
+ acct:'Notice one specific thing you saw, heard, or smelled. Write it down.',
+ tags:['fitness','nature','physical','grounding','all'],
+ deepen:{practice:'Extend to 30 minutes. Walk somewhere genuinely beautiful — a park, a trail, anywhere with trees or water. Leave your phone in your pocket.',prompts:['What does my body feel like when I move it intentionally?','What would it feel like to genuinely enjoy my body again?'],challenge:'Walk every day for 7 days. Note your mood before and after each one.'},
+ alts:[{title:'Do 10 minutes of gentle stretching or beginner yoga',why:'Stretching releases physical tension the body holds from stress and withdrawal.'},{title:'Sit outside for 10 minutes and just observe what\'s around you',why:'Stillness in nature lowers cortisol and gives an overwhelmed nervous system a real break.'}]},
+
+{w:1,title:'Tell one person — just one — that you\'re doing this',
+ why:'Secrecy feeds shame, and shame feeds the cycle. You don\'t need to announce it everywhere. But one honest conversation changes the weight of what you\'re carrying in a way that\'s hard to explain until you do it.',
+ acct:'It can be a text. It can be three words. Just say it to one safe person today.',
+ tags:['loneliness','relationships','social','all'],
+ deepen:{practice:'Write a longer, honest letter to someone you trust — not just that you\'re doing this, but why. What do you want them to know? What do you need from them?',prompts:['Who in my life do I most wish understood what I\'m going through?','What would I want people to know about this that they probably don\'t?'],challenge:'Share more of the truth with that person in a real conversation — not just the facts, but how you actually feel.'},
+ alts:[{title:'Write a letter to someone you trust — you don\'t have to send it',why:'Even unsent, writing to a specific person makes the words feel less abstract and more real.'},{title:'Post honestly in a recovery community or app',why:'Saying it to people who truly get it can feel safer — and still breaks the silence.'}]},
+
+{w:1,title:'Eat one real, nourishing meal today',
+ why:'Early recovery depletes nutrients and throws blood sugar off, making emotions much harder to manage. Eating well is not optional here — it\'s biochemical support for your brain when it needs it most.',
+ acct:'Describe what you ate. No judgment on the rest of the day — just this one meal.',
+ tags:['physical','structure','all'],
+ deepen:{practice:'Research recovery nutrition specifically — what foods support dopamine and serotonin production, what deficiencies are common, and what simple changes have the biggest impact.',prompts:['How have I been treating my body like an afterthought?','What would it mean to feed myself with actual intention?'],challenge:'Eat at least one intentional meal per day for a week and track how your mood and energy respond.'},
+ alts:[{title:'Prep something simple for tomorrow\'s breakfast tonight',why:'Decision fatigue is real. Removing one morning choice makes it easier to stay on track.'},{title:'Cook something from scratch — even something simple',why:'Cooking engages your hands and attention in a way that provides a calm, absorbing break from mental noise.'}]},
+
+{w:1,title:'Write five things that are true and good about you right now',
+ why:'Shame tells you that you are the problem. This task starts to untangle who you are from what you\'ve done. These don\'t have to be grand things — small and true beats big and hollow.',
+ acct:'Read the list back to yourself out loud — especially the ones that feel embarrassing to claim.',
+ tags:['meaning','emotions','grounding','all'],
+ deepen:{practice:'Write for 15 minutes about a time in your life when you were proud of yourself. What were you like then? What did you believe you were capable of?',prompts:['What do people who love me see in me that I don\'t always see?','What would it take for me to believe I deserve recovery?'],challenge:'Add one item to this list every day for the rest of the week — especially on the hard days.'},
+ alts:[{title:'Ask someone who loves you to name three things they value about you',why:'Hearing it from another person lands differently than writing it yourself — and you can return to it.'},{title:'Write about a time you handled something hard and how you did it',why:'Evidence that you are capable is one of the most powerful antidotes to hopelessness.'}]},
+
+{w:1,title:'Spend 15 minutes doing something that brings you peace — no guilt',
+ why:'Your nervous system needs evidence that sobriety includes joy, not just effort and restriction. Small doses of genuine enjoyment early on build the motivation to keep going. This isn\'t a reward — it\'s medicine.',
+ acct:'Name the thing before you start. Honor the full 15 minutes.',
+ tags:['creative','nature','animals','spiritual','joy','all'],
+ deepen:{practice:'Extend to a full hour. Go somewhere you genuinely love with no agenda — no productivity attached, just presence.',prompts:['What did I used to love doing before my substance took up all the space?','What would I do with time if I had no guilt and no obligations for an afternoon?'],challenge:'Schedule one hour of pure enjoyment every week this month — something with zero productivity attached.'},
+ alts:[{title:'Watch or listen to something that makes you genuinely laugh',why:'Laughter produces endorphins and temporarily interrupts cycles of anxious thinking.'},{title:'Sit with an animal for 15 minutes — your pet or someone else\'s',why:'Animals lower cortisol and blood pressure without needing anything from you emotionally.'}]},
+
+{w:1,title:'Learn one fact about how your brain changes in recovery',
+ why:'Understanding the neuroscience — dopamine dysregulation, the reward pathway — depersonalizes the struggle. What you\'re experiencing is biology, not a character flaw. That distinction matters enormously.',
+ acct:'Write down the one thing you learned that surprised or reassured you most.',
+ tags:['learning','meaning','all'],
+ deepen:{practice:'Go deeper into neuroplasticity in recovery specifically. The brain can and does change. How long does your type of recovery typically take to show measurable improvement?',prompts:['How does knowing the science change how I feel about what I\'m going through?','What does "healing" look like at the biological level?'],challenge:'Learn one new recovery-related science fact each week for the rest of the month. Keep a running list.'},
+ alts:[{title:'Watch a short video or documentary on addiction and the brain',why:'Visual learning makes abstract science click in a way that reading sometimes doesn\'t.'},{title:'Ask your counselor, sponsor, or doctor to explain what\'s happening in your brain right now',why:'A trusted person can translate the science into something personal and specific.'}]},
+
+{w:1,title:'Set one small intention for tomorrow and write it down tonight',
+ why:'Planning even one day ahead shifts your brain from reactive to proactive — a crucial gear to build in early recovery. The act of deciding tonight takes the decision off tomorrow\'s plate.',
+ acct:'Put it somewhere visible before you sleep. Make it specific — not "do better" but one concrete action.',
+ tags:['structure','grounding','all'],
+ deepen:{practice:'Write your entire ideal tomorrow hour by hour. Don\'t make it punishing — make it real and sustainable. Include buffer time, meals, movement, and at least one enjoyable thing.',prompts:['What would tomorrow look like if I felt proud of it at the end?','What time of day is most dangerous and how can I fill it intentionally?'],challenge:'Do this every night before bed for the rest of the week. Notice how a planned day feels different.'},
+ alts:[{title:'Create a simple 3-step morning routine for tomorrow',why:'Three steps is doable even on the hardest mornings. It limits decisions when your willpower is still waking up.'},{title:'Write out your full schedule for tomorrow, hour by hour',why:'Unplanned time is when vulnerability peaks. Structure is a protective factor.'}]},
+
+// WEEK 2 — Build Habits
+{w:2,title:'Start a daily mood check-in — rate yourself 1–10 each morning',
+ why:'Self-awareness is the foundation of relapse prevention. You can\'t intervene on a pattern you haven\'t noticed. Tracking creates the data; the data shows you what to do.',
+ acct:'Write the number and one word. That\'s it. Do it every day this week.',
+ tags:['emotions','structure','all'],
+ deepen:{practice:'At the end of the week, look at all seven scores. What patterns do you see? What happened the day before your lowest score?',prompts:['What does a "3" feel like in my body before I consciously register it?','What external circumstances most affect my daily number?'],challenge:'Track for the full month and bring the data to a conversation with your therapist, sponsor, or a trusted person.'},
+ alts:[{title:'Use a recovery app to log your mood and any cravings today',why:'Digital tracking creates a record you can share and review over time.'},{title:'Send a one-sentence morning check-in to your support person every day this week',why:'Daily contact with a safe person builds accountability and combats isolation simultaneously.'}]},
+
+{w:2,title:'Do a 20-minute workout — whatever your body can do today',
+ why:'Exercise is one of the most evidence-backed tools in recovery. It raises dopamine, reduces anxiety, and improves sleep — three things early recovery actively erodes. It also gives you daily proof that your body is capable.',
+ acct:'Check it off. The workout that actually happens beats the perfect workout you skip.',
+ tags:['fitness','physical','all'],
+ deepen:{practice:'Research what type of exercise has the strongest evidence for your specific recovery. Aerobic exercise has the strongest data for dopamine repair — consider building a consistent practice.',prompts:['When have I felt strongest in my body and what was I doing?','What physical goal — not weight-related — could I work toward this month?'],challenge:'Exercise for at least 20 minutes every day for the next 7 days. Track your mood before and after each session.'},
+ alts:[{title:'Take a 30-minute walk at any pace',why:'You don\'t need equipment or a gym. Sustained movement is what matters, not intensity.'},{title:'Follow a beginner yoga or movement video',why:'Yoga specifically addresses the mind-body disconnection that often underlies addiction.'}]},
+
+{w:2,title:'Name one relationship that needs repair — don\'t act yet, just name it',
+ why:'Relationships hurt by addiction don\'t heal on anyone\'s schedule — yours needs to stabilize first. But naming it is the beginning of intention, and intention precedes action.',
+ acct:'Write the person\'s name and one sentence about what happened between you.',
+ tags:['relationships','emotions','all'],
+ deepen:{practice:'Write out the full truth of what happened — from your perspective and from theirs. What do you think they felt? What do you actually owe them? What do you hope for?',prompts:['What would making this right actually require of me?','What am I most afraid this person thinks of me now?'],challenge:'Talk to your sponsor or therapist about which relationships to approach first and how. Timing and approach matter.'},
+ alts:[{title:'Write an unsent letter to someone you\'ve hurt',why:'This is about you, not them — beginning to process guilt and responsibility before you\'re ready to act.'},{title:'Make a complete list of relationships affected by your addiction, without judgment',why:'An honest inventory is the foundation for any genuine repair.'}]},
+
+{w:2,title:'Find one new meeting, group, or community to try this week',
+ why:'Community is the opposite of addiction. Not every meeting will click — that\'s normal. The practice is continuing to look for your people, because they exist and they change everything.',
+ acct:'Write down where and when. Put it in your calendar as a commitment.',
+ tags:['loneliness','social','relationships','all'],
+ deepen:{practice:'Try a different type of meeting or format than you normally would. Notice what you look for in community. What matters most to you in a room full of people?',prompts:['What does it feel like to be truly understood by another person?','Who in a recovery community has something I want — not a thing, a quality?'],challenge:'Commit to one meeting or group every single week for this entire month. Consistency matters more than frequency.'},
+ alts:[{title:'Join an online recovery meeting or community',why:'If in-person feels like too much right now, virtual communities are real communities.'},{title:'Reach out to someone you\'ve met in recovery and suggest coffee or a walk',why:'One-on-one connection with someone who gets it is different from — and complements — group settings.'}]},
+
+{w:2,title:'Build a written craving plan — what you\'ll do when one hits',
+ why:'In the middle of a craving, your prefrontal cortex goes offline. Having a pre-decided list means you don\'t have to think. You just do the next thing on the list.',
+ acct:'List at least 5 specific actions. Keep it on your phone. Share it with one person.',
+ tags:['cravings','structure','all'],
+ deepen:{practice:'For each item on your plan, write exactly how you\'ll execute it — not just "call someone" but who you\'ll call and what you\'ll say.',prompts:['What has worked before, even a little?','What does the first 60 seconds of a craving feel like in my body?'],challenge:'Learn the 5-4-3-2-1 grounding technique right now, before you need it. Practice it today even without a craving present.'},
+ alts:[{title:'Practice the 5-4-3-2-1 grounding technique right now',why:'Name 5 things you see, 4 you hear, 3 you can touch, 2 you can smell, 1 you can taste. You can\'t ride out a craving and run a sensory inventory at the same time.'},{title:'Call your support person and talk through a hypothetical craving together',why:'A plan someone else knows about is one you\'re much more likely to use.'}]},
+
+{w:2,title:'Read or listen to one recovery story — someone else\'s journey',
+ why:'Isolation tells you your experience is uniquely shameful. Someone else\'s story is proof that recovery is possible, that the struggle is human, and that the other side is real.',
+ acct:'Write one thing from their story that resonated — even one line.',
+ tags:['loneliness','meaning','learning','all'],
+ deepen:{practice:'Find a full memoir by someone in recovery and read it across this week. The depth of a full story is different from a summary or episode.',prompts:['What part of their story made me feel less alone?','What did they do that I haven\'t tried yet?'],challenge:'Find someone in recovery willing to share their story with you in person. Ask them one question: "What was the hardest part of the first month?"'},
+ alts:[{title:'Listen to a recovery podcast episode on a walk or commute',why:'Passive input still shifts perspective — and it pairs with another healthy habit.'},{title:'Watch a documentary or film centered on recovery',why:'A visual story can reach places that reading sometimes doesn\'t.'}]},
+
+{w:2,title:'Practice saying no to one thing that doesn\'t serve your recovery',
+ why:'Boundaries are a skill, not a personality trait. In early recovery, saying no to certain situations, people, or habits is not antisocial — it\'s intelligent harm reduction. Every no to the wrong thing is a yes to yourself.',
+ acct:'Write down what you said no to and how it felt — even if it felt uncomfortable or strange.',
+ tags:['emotions','structure','cravings','all'],
+ deepen:{practice:'Write a full list of the people, places, and situations that increase your risk. For each one, write exactly what you\'ll say or do if you encounter it.',prompts:['What am I most afraid to say no to?','What have I been saying yes to that I know isn\'t helping?'],challenge:'Have one honest conversation this week where you state a boundary clearly — not as an apology, but as a fact.'},
+ alts:[{title:'Acknowledge one healthy avoidance you\'ve made as a deliberate win',why:'Recognizing your own protective choices reinforces them. You\'ve already been doing this.'},{title:'Practice out loud what you\'d say if someone offered you a substance',why:'Rehearsing the moment makes it far less likely to catch you off guard when it\'s real.'}]},
+
+{w:2,title:'Do something creative today — draw, write, play music, cook, build anything',
+ why:'Addiction often colonizes the space that creativity used to occupy. Reclaiming creative expression is a way of reclaiming identity. You don\'t have to be good at it. You just have to do it.',
+ acct:'Share it with one person, or keep it entirely to yourself. Either way, you made something.',
+ tags:['creative','meaning','emotions','all'],
+ deepen:{practice:'Start a longer creative project this week — a journal you write in daily, a playlist you curate, a recipe series, a drawing practice. Something with continuity.',prompts:['What did I make or create before my substance took up all the space?','What would I make if no one was ever going to see it?'],challenge:'Spend 30 minutes creating something every day for the rest of the week. Don\'t evaluate it. Just make.'},
+ alts:[{title:'Start a recovery journal — write freely for 10 minutes with no editing',why:'Free writing accesses parts of the mind that structured thinking blocks off.'},{title:'Build a playlist of music that makes you feel like yourself',why:'Music is a powerful identity anchor and emotional regulator — curating it is an act of self-knowledge.'}]},
+
+{w:2,title:'Find three specific things to be grateful for today',
+ why:'Gratitude practice physically changes the brain over time — but only when it\'s specific. "I\'m grateful my dog waited by the door" changes your brain. "I\'m grateful for life" doesn\'t do much. Specificity is the whole point.',
+ acct:'Read them out loud. The more specific and small, the more powerful.',
+ tags:['grounding','meaning','spiritual','all'],
+ deepen:{practice:'Write for 10 minutes about one person you\'re genuinely grateful for — not what they\'ve done, but who they are and what your life would be without them.',prompts:['What is one thing from today that would have been impossible a year ago?','What do I have right now that I once thought I\'d lost for good?'],challenge:'Tell someone you\'re grateful for them today — not as a text, but in person or by phone. Specific and true.'},
+ alts:[{title:'Tell someone directly that you\'re grateful for them today',why:'Expressed gratitude deepens relationships and shifts your own emotional state simultaneously.'},{title:'Photograph one beautiful thing and sit with it for a moment',why:'Training attention toward beauty is a form of gratitude and retrains the brain to notice what\'s good.'}]},
+
+{w:2,title:'Do one practical life task you\'ve been avoiding',
+ why:'Addiction leaves a pile of neglected practical things — bills, calls, appointments. Each one you clear removes a background stress trigger and gives you evidence that you can manage your own life.',
+ acct:'Pick the one that takes less than 20 minutes. Do just that one. Write it off the list.',
+ tags:['structure','meaning','all'],
+ deepen:{practice:'Make a full list of everything you\'ve been putting off — practical, relational, medical, financial. Rank them by which causes the most background stress. Tackle that one first.',prompts:['What am I avoiding that I know I need to face?','What would it feel like to have a genuinely clean slate of responsibilities?'],challenge:'Clear one item from your avoidance list every day for the next week. No task is too small to count.'},
+ alts:[{title:'Make one important appointment — doctor, therapist, dentist',why:'Your body needs care too. Taking concrete action on physical health is an act of recovery.'},{title:'Declutter one small space — a drawer, a counter, a corner',why:'Physical order has a measurable effect on mental state. Small acts of organization signal agency.'}]},
+
+// WEEK 3 — Deepen
+{w:3,title:'Write a letter to your future self at the end of this milestone',
+ why:'Connecting your present actions to a future identity strengthens motivation in a way that willpower alone can\'t. Your future self is a real person who will either be grateful for what you do today — or not.',
+ acct:'Seal it somewhere. Set a reminder to open it at the end of your milestone.',
+ tags:['meaning','emotions','all'],
+ deepen:{practice:'Write two letters: one from the version of you who made it, and one from the version who gave up. Read both. Choose who you\'re writing toward.',prompts:['What does the version of me who succeeded look like?','What would I most want to say to myself on a day when I almost quit?'],challenge:'Write one sentence to your future self every night before bed for the rest of the month.'},
+ alts:[{title:'Describe the person you want to be in 6 months — not what you want, but who you want to be',why:'Identity-based goals are more durable than outcome-based ones. Behavior follows identity.'},{title:'Record a video message to yourself to watch on a hard day',why:'Your own calm, intentional voice is a powerful resource to have ready when everything feels loud.'}]},
+
+{w:3,title:'Have one honest conversation you\'ve been avoiding',
+ why:'Unspoken things fester and drive people back to old coping mechanisms in quiet, predictable ways. One honest conversation — even an imperfect one — clears something nothing else can.',
+ acct:'Write out what you want to say before you say it. Then say it.',
+ tags:['relationships','emotions','all'],
+ deepen:{practice:'Write both sides of the conversation first — what you\'d say and what you imagine they might say. Notice where you\'re most afraid of their response.',prompts:['What am I most afraid will happen if I tell the truth?','What has staying silent about this actually cost me?'],challenge:'Have this conversation this week. Then write about what actually happened versus what you feared.'},
+ alts:[{title:'Write both sides of a difficult conversation you need to have',why:'Playing both roles builds empathy and reveals what you actually mean versus what you think you should say.'},{title:'Ask your therapist or sponsor to role-play the conversation with you',why:'Practice reduces the emotional charge and surfaces what you actually want to communicate.'}]},
+
+{w:3,title:'Try a contemplative practice — meditation, prayer, breathwork, or stillness in nature',
+ why:'Recovery involves rebuilding a relationship with something larger than the self. Whatever form that takes for you, the research consistently shows spiritual or contemplative practice supports long-term sobriety.',
+ acct:'Try it for 10 minutes. Write one sentence about what you noticed — in your body, your thoughts, anywhere.',
+ tags:['spiritual','nature','grounding','all'],
+ deepen:{practice:'Explore a tradition or practice that genuinely calls to you. Go deeper than dabbling — a specific style of meditation, a spiritual community, time in nature as intentional practice.',prompts:['What do I believe in that is larger than myself?','What does it mean to surrender — not give up, but let go of what I can\'t control?'],challenge:'Practice for 10 minutes every morning for the rest of the week. Notice what changes by day 7.'},
+ alts:[{title:'Try a guided meditation specifically for recovery — free on many apps and YouTube',why:'Guided practice is easier to start and addresses recovery-specific thought patterns directly.'},{title:'Spend 20 quiet minutes in nature with no phone or agenda',why:'Nature has measurable restorative effects on an overstressed nervous system.'}]},
+
+{w:3,title:'Identify one old coping mechanism and consciously replace it today',
+ why:'You can\'t just stop a behavior — the space it occupied needs to be filled with something intentional. Naming the replacement consciously makes it a choice instead of an accident.',
+ acct:'Write: "When I feel _____, instead of _____, today I will _____." Then do the new thing.',
+ tags:['cravings','emotions','structure','all'],
+ deepen:{practice:'Map your full coping pattern: what triggers the urge, what the urge feels like, what the old behavior gave you, and what else might give you the same thing without the cost.',prompts:['What was I actually trying to feel or escape when I used?','What need was being met that I haven\'t found another way to meet yet?'],challenge:'Practice the replacement behavior 5 times this week — even without the trigger present. You\'re building a neural pathway.'},
+ alts:[{title:'Work through a page from a DBT or CBT workbook on coping skills',why:'Structured skill-building gives you tools that don\'t depend on willpower alone.'},{title:'Do something physical specifically when a craving or hard emotion hits today',why:'Movement and urge compete for the same neurological resources — it actually works.'}]},
+
+{w:3,title:'Do something for someone else today — any size, any form',
+ why:'Service shifts focus from what\'s wrong with you to what you have to give. It\'s one of the most consistent predictors of long-term recovery across every model and tradition. The act doesn\'t have to be grand.',
+ acct:'Name what you did and how it felt — even if it felt awkward or forced at first.',
+ tags:['meaning','loneliness','social','spiritual','all'],
+ deepen:{practice:'Research structured volunteer opportunities in your community aligned with something you care about — recovery, animals, children, the environment. Your presence matters sooner than you think.',prompts:['What would it mean to have my struggle serve someone else?','What do I have right now — even in early recovery — that someone else could use?'],challenge:'Commit to one act of service per week for the rest of the month. Notice how it changes the way each week feels.'},
+ alts:[{title:'Reach out to someone newer to recovery and offer a word of encouragement',why:'Even 5 days of experience is 5 days someone else doesn\'t have yet. Your voice matters.'},{title:'Volunteer for one hour with any organization doing good work',why:'Structured service builds community, routine, and purpose simultaneously.'}]},
+
+// WEEK 4 — Integrate
+{w:4,title:'Review everything you\'ve done this month — list every win, big and small',
+ why:'The brain in early recovery discounts progress and amplifies setbacks. Deliberate review is not self-congratulation — it\'s a corrective to a biased system. You have done real things. Name them.',
+ acct:'Read the list to someone who can celebrate with you — a sponsor, a friend, your therapist.',
+ tags:['meaning','all'],
+ deepen:{practice:'Write a full retrospective — what you expected, what surprised you, what was harder than you thought, what was easier. Be honest about both the progress and where you want to grow.',prompts:['What is the single most important thing I did this month?','What did I learn about myself that I didn\'t know at the start?'],challenge:'Share this reflection with one person who was part of your journey. Let them respond.'},
+ alts:[{title:'Write yourself a genuine congratulations letter for what you\'ve survived and started',why:'Self-compassion accelerates healing. Treat yourself with the same warmth you\'d give someone you love.'},{title:'Make a then-vs-now comparison — where were you on day one?',why:'Progress in recovery is often invisible until you stop and look at the distance behind you.'}]},
+
+{w:4,title:'Revisit your three reasons for choosing this — have they shifted?',
+ why:'Your "why" evolves as you do. Checking in on it keeps your motivation rooted in who you\'re becoming, not just who you were afraid of staying. A living "why" is more powerful than a frozen one.',
+ acct:'Update the list if needed. These are your anchors — keep them current.',
+ tags:['meaning','grounding','all'],
+ deepen:{practice:'Write about the evolution of your motivation across the month. What did you think this was about on day one? What do you understand now that you didn\'t then?',prompts:['What matters more to me now than it did at the start?','What have I discovered about what I actually want?'],challenge:'Share your updated "why" with your support person and ask: does this sound like me?'},
+ alts:[{title:'Write about what surprised you most about the past month',why:'Surprises — good and difficult — are always evidence of growth.'},{title:'Talk with your sponsor or therapist about how your motivation has changed',why:'Witnessed reflection deepens in a way that solo reflection doesn\'t.'}]},
+
+{w:4,title:'Plan the next milestone — what does the next 30 days look like?',
+ why:'Recovery doesn\'t end at a milestone — it continues through them. Having a next chapter keeps momentum from plateauing and keeps you forward-facing rather than just holding ground.',
+ acct:'Write 3 specific things you want to be true at the next milestone.',
+ tags:['structure','meaning','all'],
+ deepen:{practice:'Write a full vision for your life at the next milestone — not just recovery-specific, your whole life. Work, relationships, health, joy. What does it look like if things keep going in this direction?',prompts:['What would I tell someone who was about to start their first month?','Which habit from this month do I never want to lose?'],challenge:'Share this vision with your sponsor or therapist. Ask them to hold you accountable at your next meeting.'},
+ alts:[{title:'Name which habits from this month you want to keep forever',why:'Some of what you built is for life. Name it explicitly so it doesn\'t quietly drift away.'},{title:'Write a 90-day vision — what does your life look like if things keep going in this direction?',why:'A long vision connects daily discipline to a life you actually want to be living.'}]},
+
+{w:4,title:'Do one thing your first-day self would not have believed possible',
+ why:'Even a small thing — a conversation, a physical act, showing up somewhere that used to feel impossible — is evidence of transformation. Evidence matters for a brain that defaults to doubt.',
+ acct:'Tell someone what you did. Let them witness it.',
+ tags:['meaning','fitness','relationships','all'],
+ deepen:{practice:'Write the full story — what the thing was, why it felt impossible at the start, what it took to do it, and what it means that you did.',prompts:['What would I have said on day one if someone told me I\'d do this?','What does this prove about me that I wasn\'t sure was still true?'],challenge:'Name something even harder — something you\'d want to have done by the 90-day mark. Write it down. Tell someone.'},
+ alts:[{title:'Go somewhere alone that used to feel unsafe without a substance',why:'Proving you can be present in a previously impossible environment is one of the most powerful experiences in recovery.'},{title:'Say something honest and vulnerable to someone you care about',why:'Emotional intimacy without a chemical buffer is a skill you\'re actively building. This is the practice.'}]},
+
+{w:4,title:'Write your long-term support plan — names, times, and check-ins',
+ why:'The greatest relapse risk factor is isolation. A written support plan with real names and real scheduled contact transforms intention into infrastructure — and infrastructure outlasts motivation.',
+ acct:'Share it with at least one person on the list. Ask them directly: are you in?',
+ tags:['loneliness','structure','relationships','social','all'],
+ deepen:{practice:'Build a full emergency plan for hard days: your early warning signs, the first three people you call, what you ask them for, and what you do if you can\'t reach anyone.',prompts:['Who in my life actually shows up when things get hard?','What does asking for help sound like when I say it out loud?'],challenge:'Schedule the first month of support contact right now — recurring meetings, check-in calls, or texts. If it\'s not in the calendar, it\'s optional.'},
+ alts:[{title:'Schedule your next month of meetings, appointments, and check-ins right now',why:'Pre-commitment removes the moment-by-moment decision. That\'s exactly when you need fewer decisions.'},{title:'Write your early warning signs and what you\'ll do — and who you\'ll call — when they appear',why:'A crisis plan made before a crisis is infinitely more useful than one made during one.'}]}
+];
+
+// ── MONTH 2 TASKS (Days 31-60) ─────────────────────
+const DAILY_BANK_60=[
+{w:5,title:"Schedule a full physical with your doctor — today, not someday",why:"Recovery takes a real toll on the body. Bloodwork, blood pressure, liver function, vitamin deficiencies — you need a baseline. Knowing what's happening inside your body turns recovery from abstract to concrete.",acct:"Call or book online before you close this. Write the appointment date down.",tags:["physical","structure","all"],deepen:{practice:"Before the appointment, write every question you want to ask your doctor — including being honest about your recovery. Prepare to tell the truth.",prompts:["What am I most afraid my doctor might find?","What would it feel like to have a doctor who actually knows what's going on with me?"],challenge:"At the appointment, tell your doctor you're in recovery. Ask what they recommend monitoring."},alts:[{title:"Research what bloodwork panels are recommended for people in recovery from your substance",why:"Going in informed means you can ask for the right tests."},{title:"Send your existing doctor a message updating them on your recovery today",why:"A doctor who knows you're in recovery can be a genuine ally."}]},
+{w:5,title:"Find and contact one therapist or counselor today",why:"A therapist is not a luxury. Addiction is a mental health issue. Working with a professional who can see patterns you can't see is one of the highest-leverage things you can do in month two.",acct:"Search 'therapist [your city] addiction recovery' or use psychologytoday.com. Filter by 'substance use.' Call or message three. One will respond.",tags:["emotions","meaning","all"],deepen:{practice:"If cost is a barrier: sliding scale therapists, community mental health centers, Open Path Collective, or therapists who accept Medicaid. Cost is a solvable problem.",prompts:["What would I most want a therapist to help me understand about myself?","What am I carrying that I've never said out loud to anyone?"],challenge:"Make your first appointment this week. If you have a therapist, bring them something you've been holding back."},alts:[{title:"Research what therapy type has the strongest evidence for your recovery — CBT, DBT, EMDR, ACT",why:"Understanding the difference helps you find the right fit."},{title:"Ask your sponsor or doctor for a therapist recommendation",why:"A personal referral is often the fastest path."}]},
+{w:5,title:"Audit your sleep — track it for one week starting tonight",why:"Sleep is where your brain does the repair work of recovery. Disrupted sleep makes cravings worse, emotional regulation harder, and relapse more likely.",acct:"Track each night: bedtime, how long to fall asleep, wake-ups, how you feel in the morning.",tags:["physical","structure","all"],deepen:{practice:"Research sleep hygiene specific to recovery — what substances most disrupt REM sleep and for how long, and what helps restore it.",prompts:["What would I have more of if I genuinely slept well?"],challenge:"Implement one concrete sleep hygiene change tonight: consistent bedtime, no screens 30 min before bed, or a wind-down routine."},alts:[{title:"Talk to your doctor about your sleep — be specific about what's disrupted",why:"Sleep disruption in recovery is common and treatable. It's a medical issue, not a willpower issue."},{title:"Try a sleep-specific guided meditation tonight — free on Insight Timer or YouTube",why:"Guided sleep practice can interrupt the anxious thought loops that keep recovery brains awake."}]},
+{w:5,title:"Research mental health conditions that commonly co-occur with your type of addiction",why:"The majority of people with addiction also have a co-occurring condition — depression, anxiety, PTSD, ADHD. These aren't separate from your recovery. They're often the engine underneath it.",acct:"Look up 'dual diagnosis' and your substance. Write down any conditions that sound familiar. Bring the list to your next appointment.",tags:["learning","emotions","all"],deepen:{practice:"Take a PHQ-9 (depression) and GAD-7 (anxiety) screening — both free online. Score yourself honestly and bring the results to a professional as conversation starters.",prompts:["Have I always suspected something else was going on underneath the addiction?","What would it change if there was a name for what I've been experiencing?"],challenge:"Bring your self-screening results to your next appointment and say: 'I took this and wanted to share what came up.'"},alts:[{title:"Watch a video or read about dual diagnosis and addiction",why:"Understanding the connection depersonalizes both and points toward real treatment."},{title:"Ask your therapist directly: 'Do you think I might have a co-occurring condition worth evaluating?'",why:"A direct question gets a direct answer."}]},
+{w:5,title:"Schedule a dental appointment — yes, today",why:"Dental health is one of the most commonly neglected areas in recovery. Addressing it is an act of claiming your body back.",acct:"Book the appointment. If cost is a barrier, search for dental schools in your area — they provide supervised care at dramatically reduced rates.",tags:["physical","structure","all"],deepen:{practice:"If dental anxiety has kept you away, tell the dentist before you sit down: 'I have significant dental anxiety and may need you to go slower.' Most will accommodate.",prompts:["What has shame about my dental health cost me?"],challenge:"After the appointment, establish a daily dental care routine."},alts:[{title:"Research community health clinics that offer sliding-scale dental care",why:"Free and low-cost options exist in most areas."},{title:"If dental care is genuinely inaccessible now, establish a daily dental hygiene routine as the step you can take today",why:"Starting the habit now is preparing, not waiting."}]},
+{w:5,title:"Ask your doctor about medication-assisted treatment",why:"MAT is not a shortcut or a lesser form of recovery. For many substances, it is the most evidence-based treatment available and dramatically reduces mortality risk.",acct:"Write two sentences before the appointment: what you've tried and what you're curious about. That's enough to start.",tags:["physical","learning","all"],deepen:{practice:"Research: buprenorphine/naltrexone for opioids, naltrexone for alcohol, acamprosate for alcohol. Look up the actual evidence, not the stigma. Then decide based on facts.",prompts:["Have I avoided this conversation because of what I think it means?","What would I tell a friend who needed this treatment but was ashamed to ask?"],challenge:"At your next appointment, ask directly: 'Am I a candidate for any medication support?'"},alts:[{title:"Research SAMHSA's treatment locator at findtreatment.gov",why:"Access to evidence-based treatment is a right, not a reward for doing recovery the hard way."},{title:"Talk to someone in recovery about their experience with MAT",why:"Honest conversations with people who've navigated this are often more useful than reading alone."}]},
+{w:5,title:"Create a personal wellness dashboard — one score for each area of health",why:"What gets measured gets attention. A simple weekly check-in across physical, mental, social, and spiritual health gives you early warning when one area is slipping.",acct:"Rate 1–10: sleep, nutrition, movement, emotional state, social connection, spiritual practice. Track weekly.",tags:["structure","physical","emotions","all"],deepen:{practice:"Add one question: 'What area is most likely to derail me this week, and what's my plan?' Making this conscious before the week starts is prevention.",prompts:["Which area of my health has been most neglected and why?"],challenge:"Do this dashboard every Sunday for the rest of the month. Notice what correlates."},alts:[{title:"Download a recovery tracking app and set it up with your key health metrics today",why:"Apps provide graphs and patterns a notebook alone can't."},{title:"Share your wellness dashboard with your therapist or sponsor weekly",why:"A witnessed check-in is harder to skip."}]},
+{w:5,title:"Research what your insurance covers for mental and behavioral health",why:"Most people in recovery don't know what their insurance covers — therapy, psychiatry, residential treatment, MAT. Knowing removes assumed cost as a barrier.",acct:"Call the member services number on the back of your insurance card: 'What mental health and substance use benefits do I have?' Write it down.",tags:["structure","learning","all"],deepen:{practice:"If uninsured, research: Medicaid eligibility, federally qualified health centers (FQHCs), and SAMHSA grants.",prompts:["What have I assumed is too expensive that might actually be covered?"],challenge:"Use what you learn to book one appointment you've been putting off because of assumed cost."},alts:[{title:"Ask a social worker or case manager to help navigate your insurance benefits",why:"Navigating insurance is a skill. Asking for help is not a weakness."},{title:"Research federally qualified health centers near you — they provide care regardless of ability to pay",why:"These centers exist to remove cost as a barrier."}]},
+{w:5,title:"Write down every medical professional who should know you're in recovery",why:"Your doctor, dentist, pharmacist, and any specialists all make decisions affected by your recovery status. Many people never tell them — and it creates gaps in care.",acct:"List every provider. Mark whether they know. Then decide: who needs to know that doesn't?",tags:["physical","structure","all"],deepen:{practice:"Write out what you'd say to providers who don't know: 'I'm in recovery from [substance]. I'm telling you because I want us to make decisions with that in mind.'",prompts:["What have I been managing alone that a doctor could help with?"],challenge:"Tell one provider who doesn't know yet. Notice what actually happens when you say it."},alts:[{title:"Ask your primary care doctor to coordinate care with your other providers",why:"Integrated care dramatically improves outcomes."},{title:"Bring a list of all your medications to your next appointment and review for recovery-relevant interactions",why:"Some common medications interact significantly with recovery."}]},
+{w:5,title:"Write a letter of gratitude to your body",why:"Addiction creates a warlike relationship with the body. Month two is far enough in to begin the work of repair and appreciation.",acct:"Write for 10 minutes. Let it be imperfect.",tags:["physical","emotions","meaning","all"],deepen:{practice:"Follow the letter with one concrete act of care for your body today — movement, nourishment, or rest given because your body deserves it.",prompts:["What has my body carried for me that I've never acknowledged?","What does it mean to be a good steward of this body going forward?"],challenge:"Write one sentence of thanks to your body every morning for the next week."},alts:[{title:"Do something purely physical and pleasurable today — a bath, a slow meal you actually taste",why:"Reintroducing pleasure to the body without a substance is a core practice of recovery."},{title:"Research somatic therapy or body-based approaches to trauma and addiction recovery",why:"Many people carry trauma in the body that talk therapy alone doesn't fully reach."}]},
+{w:6,title:"Research two volunteer opportunities and reach out to one today",why:"Service is a proven protective factor in recovery. Moving from being the person who needs help to the person who provides it is one of the most powerful identity shifts available.",acct:"Go to volunteermatch.org or search '[your city] volunteer opportunities.' Email or call one today.",tags:["meaning","social","all"],deepen:{practice:"Look specifically for volunteer roles in recovery-adjacent spaces: recovery community organizations, sober living, treatment centers, harm reduction. Your experience is a credential.",prompts:["What would it mean to have my struggle serve someone else?","Where do I have something to give that someone else needs?"],challenge:"Commit to one ongoing volunteer role — not a one-time event, but something with a recurring schedule."},alts:[{title:"Show up early to your next meeting and help set up — chairs, coffee, whatever needs doing",why:"Service at meetings doesn't require a formal role. Just five minutes early."},{title:"Reach out to a recovery organization about joining their service team",why:"Your lived experience is exactly what they need."}]},
+{w:6,title:"Share something from your recovery with one person who could use it",why:"You are further than someone else. Even two months of experience, shared honestly, can change the trajectory of another person's day.",acct:"'I was where you are two months ago. Here's what helped me.' That's it.",tags:["meaning","social","relationships","all"],deepen:{practice:"Write your short recovery story — three paragraphs: what happened, what changed, what you've learned. You'll use it more than you think.",prompts:["What do I wish someone had told me when I was where they are now?"],challenge:"Share your short story at a meeting, in a group, or with one person newer to recovery."},alts:[{title:"Post in an online recovery community sharing something you've learned in the past 60 days",why:"Online communities reach people who can't access in-person support."},{title:"Check in consistently with one person newer to recovery than you",why:"Consistent presence is often the most valuable thing a mentor offers."}]},
+{w:6,title:"Cook or bring a meal to someone who needs it",why:"Food is one of the most direct forms of care. It communicates: I thought of you, and I showed up.",acct:"Identify the person. Make or buy something. Deliver it. Notice how this simple act feels.",tags:["social","meaning","all"],deepen:{practice:"Think about who in your life is quietly struggling. Show up for them in a practical, tangible way — not with advice, with presence or help with something concrete.",prompts:["Who might be struggling without saying anything?"],challenge:"One act of practical care per week for the rest of the month."},alts:[{title:"Offer something specific and practical — a ride, a task, watching a kid",why:"The most useful offer is always specific."},{title:"Sign up with an organization that does meal delivery to people in recovery or transitional housing",why:"Structured service meets a real need and builds community."}]},
+{w:6,title:"Take a service role at your meeting, group, or community",why:"Every recovery community runs on people doing the work behind the scenes. A role creates accountability, connection, and a reason to show up beyond yourself.",acct:"Ask today: is there a service role available? Secretary, greeter, phone list, literature — any of them count.",tags:["social","structure","meaning","all"],deepen:{practice:"If meetings aren't your path, find the equivalent elsewhere — a faith community, volunteer organization, recovery advocacy group.",prompts:["What keeps me from taking on more responsibility in the communities I'm part of?"],challenge:"Hold the role for at least a month. Notice how your relationship to the community changes."},alts:[{title:"Join a recovery advocacy organization — Young People in Recovery, Faces & Voices of Recovery",why:"Recovery advocacy turns your experience into systemic change."},{title:"Offer to be someone's temporary peer support contact while they find the right fit",why:"The gap between asking for help and getting consistent support is where people fall through."}]},
+{w:6,title:"Do one anonymous act of service for a stranger — no explanation, no credit",why:"Anonymous service breaks the transactional logic addiction trains into us. You do it, nothing comes back, and somehow that's exactly the point.",acct:"Pay for the person behind you. Leave a generous tip. Help someone carry something. Small and anonymous.",tags:["meaning","spiritual","all"],deepen:{practice:"Do one anonymous act every day this week. Don't tell anyone. Notice what it does to how you move through the world.",prompts:["What does it feel like to give with no return and no recognition?"],challenge:"Go an entire day with service as your intention — not a task to complete, but a lens for every interaction."},alts:[{title:"Write a positive review for a business that helped you during a hard time",why:"Positive attention is one of the simplest and most underused acts of service."},{title:"Donate to a recovery organization, even a small amount",why:"Financial support of recovery work is a form of service that doesn't require your time."}]},
+{w:6,title:"Learn about the recovery community landscape in your area",why:"There is more infrastructure for recovery than most people know. Knowing what exists means you can use it and eventually contribute to it.",acct:"Search 'recovery community organization [your city]' and '[your city] recovery resources.' List three you didn't know existed.",tags:["learning","social","all"],deepen:{practice:"Research recovery housing and sober living in your area even if you don't need it — knowing what exists means you can help someone else find it.",prompts:["What resources do I wish had existed when I was starting?"],challenge:"Attend one event at a recovery organization you've never been to."},alts:[{title:"Look up whether your area has a Recovery Community Organization and attend one event",why:"RCOs are peer-led and offer community, advocacy, and resources outside the clinical system."},{title:"Research peer support specialist certification — a credential that turns lived experience into a career",why:"Peer support is one of the most meaningful uses of your recovery experience."}]},
+{w:6,title:"Write about what you've received from other people in your recovery",why:"When we're in it, we often can't see how much we're being held by other people. Writing it down makes it visible — and visible gifts create the capacity to pass them forward.",acct:"List every person who has shown up for you. Write one specific thing each one did.",tags:["relationships","meaning","all"],deepen:{practice:"Choose one person from the list and thank them in a way that matches the size of what they gave you.",prompts:["Who have I taken for granted because they were always there?"],challenge:"Tell one person on your list exactly what they gave you. Specific, named, direct."},alts:[{title:"Write thank-you notes to three people who have supported you — handwritten if possible",why:"A handwritten thank-you note is rare enough now that it always lands."},{title:"Start making amends to someone by beginning with gratitude rather than apology",why:"Gratitude disarms defensiveness — in them and in you."}]},
+{w:6,title:"Identify one cause bigger than your recovery that you care about",why:"Purpose that extends beyond staying sober is one of the strongest predictors of long-term recovery. Connecting to something you'd fight for changes what you're living for.",acct:"Write it down. One cause, one reason you care.",tags:["meaning","spiritual","all"],deepen:{practice:"Research how people in recovery are already contributing to this cause. The overlap between recovery communities and social justice, community organizing, and advocacy is significant.",prompts:["What injustice or need makes me genuinely angry?","What would I want to be known for having contributed to?"],challenge:"Take one concrete step toward the cause this week."},alts:[{title:"Research how your recovery experience could inform advocacy work",why:"People with lived experience are among the most credible voices in healthcare and policy."},{title:"Find one organization working on something you care about and sign up for their list",why:"This is how involvement starts."}]},
+{w:6,title:"Make one concrete service commitment and put it in your calendar",why:"One-time service is meaningful. Ongoing service is transformative. The difference is a calendar entry and a decision to honor it.",acct:"Name the commitment. Write the recurring time. Share it with one person who will notice if you stop.",tags:["structure","meaning","social","all"],deepen:{practice:"Think about what service fits your actual life — not the most impressive thing, but the thing you could do consistently for a year.",prompts:["What form of service could I sustain, not just do once?"],challenge:"Do the commitment three weeks in a row before evaluating whether it's the right fit."},alts:[{title:"Commit to a specific number of service hours per month and track them",why:"Quantifying makes it concrete and more likely to happen."},{title:"Join a service committee within your recovery community",why:"Committees provide structure, accountability, and the satisfaction of working toward something together."}]},
+{w:7,title:"Learn the conversational volley and practice it today",why:"Most people in recovery were never taught how to have mutual conversations. The pattern of addiction often involves performing or isolating. The volley is the repair.",acct:"The formula: share one small thing → ask one genuine question → listen → share a follow-up → ask a follow-up. Do this in one conversation today.",tags:["loneliness","relationships","social","all"],deepen:{practice:"The conversational volley isn't manipulation — it's reciprocity. When you share, you give others permission to share. In your next three conversations, consciously alternate sharing and asking.",prompts:["When do I talk too much without asking about the other person?","What does it feel like to be genuinely listened to?"],challenge:"Have one conversation where you share something real and then ask the other person a real question."},alts:[{title:"Practice active listening in one conversation — receive without formulating your response while they're talking",why:"Most of us listen to respond, not to understand."},{title:"Ask one person today: 'How are you really doing?' — and stay with whatever they say for at least two minutes",why:"'How are you really' is an invitation."}]},
+{w:7,title:"Practice calibrated vulnerability — disclosure in three levels",why:"Vulnerability doesn't mean telling everyone everything. It means sharing something real at the appropriate depth for the relationship. Over-sharing overwhelms; under-sharing isolates.",acct:"Level 1 (acquaintance): share a preference. Level 2 (friend): share something you're working on. Level 3 (close person): share something that costs you. Practice one of each today.",tags:["relationships","social","emotions","all"],deepen:{practice:"Honestly assess: am I under-sharing (performing okayness) or over-sharing (flooding people before trust is built)? Match depth to relationship stage.",prompts:["With whom am I performing okayness when I could share something real?","Is there someone I've been over-sharing with, making the relationship feel uneven?"],challenge:"In your next difficult conversation, use this format: 'I feel [emotion] when [specific situation]. What I need is [specific request].'"},alts:[{title:"Write a letter to someone you want to be closer to — even unsent — practicing what real sharing feels like",why:"Writing first removes the pressure of real-time reaction."},{title:"Tell your therapist or sponsor one thing you've been minimizing or keeping to yourself",why:"The thing you've been leaving out is usually the most important thing to say."}]},
+{w:7,title:"Ask for something you need — directly and specifically",why:"Asking for help is a relational skill that addiction erodes — by making people either too self-reliant or trained to manipulate rather than ask directly. Direct asking is learnable.",acct:"The formula: 'I need [specific thing] by [specific time]. Can you help?' Not 'I'm struggling.' Not 'I don't want to ask but...' Just: 'I need X. Can you help?'",tags:["relationships","loneliness","all"],deepen:{practice:"Notice what happens in your body when you need to ask for help. What story do you tell yourself? That story — not the ask — is what keeps people isolated. Write it down. Then ask anyway.",prompts:["What do I believe about people who need help?","What has the fear of asking cost me?"],challenge:"Ask for something from three different people this week. Notice which was hardest and why."},alts:[{title:"Practice saying 'I don't know' and 'I was wrong' in a conversation today",why:"These two phrases disarm defenses and build trust faster than almost anything else."},{title:"Text or call someone and say: 'I've been thinking about you. Can we talk?' No explanation needed.",why:"Reaching out without a reason is one of the most intimate acts available."}]},
+{w:7,title:"Have a repair conversation using a clear format",why:"Most difficult conversations fail because people don't have a structure. Without one, conversations collapse into old patterns — defensiveness, avoidance, or flooding.",acct:"Format: (1) 'When [specific situation], I felt [emotion].' (2) 'What I made it mean was [interpretation].' (3) 'What I need from you is [specific request].' Practice this with one person.",tags:["relationships","emotions","all"],deepen:{practice:"Step 2 — 'what I made it mean' — is where accountability lives. Saying 'I made it mean you don't care' instead of 'you don't care' opens space instead of closing it.",prompts:["What conversation have I been avoiding because I don't know how to have it without it going badly?"],challenge:"Use this format in one real conversation this week. Write about what happened."},alts:[{title:"Write out the conversation using this format before having it — as rehearsal",why:"Preparing the structure in writing means you don't have to find words in heightened emotion."},{title:"Practice this format with your therapist or sponsor as a role-play",why:"Practice with a safe person first removes the stakes enough to learn the skill."}]},
+{w:7,title:"Identify one person you want to grow closer to and take one step toward them",why:"Relationships don't deepen on their own. They deepen through specific, intentional moments of showing up and sharing something real.",acct:"Name the person. Identify one specific thing you could do or say that would move the relationship one step closer. Do it this week.",tags:["loneliness","relationships","social","all"],deepen:{practice:"What have you been waiting for in this relationship? What would happen if you simply moved toward them with one genuine gesture?",prompts:["What is one thing this person doesn't know about me that, if they knew, would make us closer?"],challenge:"Do this with three relationships over the next three weeks."},alts:[{title:"Invite someone to do something specific — a plan with a time, not 'we should hang out'",why:"Specific plans actually happen."},{title:"Tell someone something you appreciate about them — specific, named, in person if possible",why:"Most people receive far less specific appreciation than they deserve."}]},
+{w:7,title:"Practice sitting with someone else's pain without trying to fix it",why:"One of the most isolating experiences is sharing something hard and having someone immediately try to fix or minimize it. Learning to just be with someone is one of the most profound gifts.",acct:"When someone shares something hard today, say: 'That sounds really difficult. I'm here.' Then just be there. No solutions unless asked.",tags:["relationships","social","emotions","all"],deepen:{practice:"The urge to fix other people's pain is often about our own discomfort with it. Notice when someone's suffering makes you want to resolve it quickly. That's the signal to slow down and stay.",prompts:["Has anyone ever just sat with me in pain without trying to fix it? What did that feel like?"],challenge:"Offer to be someone's 'just listen' call this week — someone who can call and be heard without advice."},alts:[{title:"Tell someone: 'You don't have to be okay around me. Tell me what's actually going on.'",why:"Explicit permission to be real is rarer and more valuable than most people realize."},{title:"Ask your therapist to help you understand the difference between empathy and advice — and practice them separately",why:"Empathy is a skill. Knowing when advice is wanted is a different skill."}]},
+{w:7,title:"Write about a relationship you've been maintaining at arm's length — and why",why:"Most people have relationships they've carefully not let get too close. Understanding why — what you're protecting yourself from — is the beginning of choosing differently.",acct:"Write for 15 minutes. What do you keep at a distance, and what story are you telling yourself that makes the distance feel necessary?",tags:["relationships","emotions","all"],deepen:{practice:"Write about: what would happen if you let this person in, and what you're actually afraid of.",prompts:["What would I need to believe about myself to let this person get closer?","What has keeping this person at a distance actually cost me?"],challenge:"Take one step toward this person this week — just one. Write about what happened."},alts:[{title:"Talk to your therapist about your attachment patterns — how you typically get close, and what gets in the way",why:"Attachment patterns formed early are often running adult relationships."},{title:"Read or listen to something on vulnerability and connection — Brene Brown's work is a reliable starting point",why:"Having language for what you're experiencing makes it easier to work with."}]},
+{w:7,title:"Learn one person's story — really listen to how they got here",why:"When you know someone's real story, it's much harder to treat them as a supporting character in yours. Recovery communities are full of extraordinary stories. Most people never ask to hear them.",acct:"Ask one person in your recovery community: 'Would you be willing to tell me your story sometime?' Then actually listen when they do.",tags:["loneliness","social","relationships","all"],deepen:{practice:"As you listen, notice: what is similar to yours, and what is completely different? Both matter.",prompts:["What does hearing someone else's story do to how I feel about my own?"],challenge:"Share one part of your own story with someone this week — not the cleaned-up version, but a real piece. Notice what comes back."},alts:[{title:"Listen to a recorded testimony from someone in recovery — really listen as if you're meeting them",why:"Recorded stories reach across time. Whoever told it wanted someone to hear it."},{title:"Ask someone with years of recovery: 'What do you know now that you wish someone had told you in month two?'",why:"The answers are usually the most useful things available to you right now."}]},
+{w:7,title:"Do one thing that scares you socially — then reflect on what actually happened",why:"Social fear in recovery is about accumulated experience — the shame, the awkwardness, the uncertainty about who you are sober. The only way through it is through it.",acct:"Name the scary social thing. Do it. Write one paragraph about what you expected and what actually happened.",tags:["loneliness","social","all"],deepen:{practice:"Think about what social situations have felt off-limits since you got sober. The slightly-too-hard ones are the practice ground.",prompts:["What is the social situation I've been avoiding most consistently?"],challenge:"Do one moderately scary social thing per week for the rest of the month."},alts:[{title:"Go somewhere alone where you'll encounter strangers and have at least one brief genuine interaction",why:"Rebuilding the confidence to connect casually is practice for the deeper connections."},{title:"Join a class or group where you'll be a beginner — a fitness class, a creative workshop",why:"Being a beginner together creates instant common ground."}]},
+{w:8,title:"Write your personal values — the five that are most truly yours",why:"Recovery is a chance to build a life on what actually matters to you. Most people have never done a deliberate values inventory.",acct:"Don't pick aspirational values — pick the ones that, when violated, you feel it physically.",tags:["meaning","all"],deepen:{practice:"For each value, write: how has my addiction violated this, and how does my recovery honor it? This turns values into a living decision-making map.",prompts:["What do I keep doing even when it's inconvenient or costs me something?"],challenge:"Use your values as a filter for one decision this week."},alts:[{title:"Take the VIA Character Strengths assessment at viacharacter.org — one of the best validated tools available",why:"It identifies your top strengths and helps you deploy them in recovery."},{title:"Ask someone who knows you well: 'What do you think I care most about, based on how I actually live?'",why:"The answer often reveals values you're living without naming."}]},
+{w:8,title:"Write a one-sentence personal mission statement for this season",why:"A mission statement is an honest answer to: what am I here to do and be right now? It doesn't have to be permanent. It has to be true for this chapter.",acct:"'I am someone who ___.' Write ten versions, then pick the one that makes you feel something.",tags:["meaning","all"],deepen:{practice:"Test your mission statement against your actual days. Does how you spend your time reflect it? If not, that's data.",prompts:["What would I want people to say about how I lived this year?"],challenge:"Put your mission statement somewhere you'll see it every morning."},alts:[{title:"Write about the person you're becoming in this recovery — not who you were, but who you're in the process of being",why:"Identity is in motion. Writing about the emerging version makes it more real."},{title:"Ask your sponsor or therapist: 'Based on what you've seen, what do you think I'm here to do?'",why:"Trusted external perspective on purpose is often more accurate than self-assessment."}]},
+{w:8,title:"Set one six-month goal in each of three life areas: health, relationships, and work/purpose",why:"Two months in is exactly the right time to start building toward something. Month two is where you start pointing toward a life you actually want.",acct:"Write three goals — one per area. Make each specific enough that you'd know when you'd achieved it.",tags:["structure","meaning","all"],deepen:{practice:"For each goal, write the first three concrete steps. Goals without actions are just wishes.",prompts:["What would I be embarrassed to tell someone I wanted, because it feels too ambitious?"],challenge:"Share your three goals with one person and ask them to check in with you in a month."},alts:[{title:"Research one educational or career path and find out what the first step looks like",why:"Month two is not too early to start planning. Planning is an act of believing in your future."},{title:"Write what your life looks like in one year if everything keeps going in this direction",why:"A specific vision gives direction to daily effort."}]},
+{w:8,title:"Explore one new interest or identity that has nothing to do with recovery",why:"Recovery can easily become the totality of your identity. Whole people have lives that extend beyond their healing.",acct:"Pick something you've been curious about and take one concrete step: sign up for a class, buy a book, attend a free event.",tags:["meaning","creative","all"],deepen:{practice:"What were you interested in before addiction took over? 'Later' is now.",prompts:["What part of myself has been waiting, patient, for the chaos to settle?"],challenge:"Commit to this interest for one month — as a practice of being someone who has a life."},alts:[{title:"Join a club or class organized around an interest — not recovery — and show up consistently",why:"Being the new person somewhere with something in common that isn't addiction rebuilds a self that exists outside the struggle."},{title:"Create something this week — not as therapy, just as enjoyment",why:"Making things for the sake of making is one of the clearest signs you are becoming someone with a life again."}]},
+{w:8,title:"Write about who you are at 60 days that you weren't at day one",why:"Progress in recovery is easy to miss because you're inside it. A deliberate inventory of who you've become creates evidence that overrides the brain's tendency to discount how far you've come.",acct:"Write for 20 minutes. Be specific. Not 'I'm better' but 'I now do X that I couldn't on day one.'",tags:["meaning","all"],deepen:{practice:"Share this writing with your sponsor, therapist, or someone who knew you at the beginning. Ask what they've noticed that you haven't named.",prompts:["What capacity do I have now that I couldn't have imagined two months ago?"],challenge:"Write this inventory again at 90 days and compare."},alts:[{title:"Ask three people who care about you: 'What difference have you noticed in me in the past 60 days?' Listen without minimizing.",why:"Receiving feedback about your growth is a form of vulnerability. Let it land."},{title:"Make a 'then vs. now' list — 10 things that are different or possible now that weren't on day one",why:"Ten specific things is accurate accounting."}]}
+];
+
+// ── MONTH 3 TASKS (Days 61-90) ─────────────────────
+const DAILY_BANK_90=[
+{w:9,title:"Research peer support specialist certification in your state",why:"Peer support is one of the fastest-growing fields in behavioral health — and one of the only fields where lived experience is required. At 90 days, knowing the path exists changes what you believe is available to you.",acct:"Search '[your state] peer support specialist certification.' Write down the requirements and whether you're eligible or when you will be.",tags:["meaning","learning","all"],deepen:{practice:"Interview someone who is a certified peer support specialist. Ask: how did you get here, what does the work involve, and what do you wish you'd known?",prompts:["What would it mean to make my recovery not just survivable but useful to the world?"],challenge:"If eligible, begin the application process. If not yet, set a calendar reminder for when you will be."},alts:[{title:"Research recovery coaching — a less formally credentialed but immediately accessible path",why:"Recovery coaching has fewer barriers to entry and can begin almost immediately."},{title:"Volunteer with a recovery organization in a role that uses your experience rather than just your time",why:"Experience-based volunteering prepares you for credentialed roles."}]},
+{w:9,title:"Reach out to someone newer to recovery and offer consistent support",why:"Mentorship is among the most powerful tools for maintaining your own recovery. Having someone looking up to you changes the stakes in exactly the right way.",acct:"Reach out today: 'I'm at 90 days and I'd like to offer consistent check-ins if that would be useful to you.'",tags:["social","meaning","relationships","all"],deepen:{practice:"Before offering support, talk to your sponsor or therapist about what you're ready to offer and what your limits are. Good mentorship requires knowing your own boundaries.",prompts:["What do I wish someone had consistently offered me in my first 30 days?"],challenge:"Commit to weekly check-ins with this person for at least one month."},alts:[{title:"Share your contact info at a meeting or group as someone available to talk",why:"Not everyone is ready for formal sponsorship — but being someone a newer person can text on a hard day is a real and immediate form of service."},{title:"Offer to be a meeting greeter or make introductory calls to newcomers",why:"These are forms of mentorship requiring a specific commitment without the full weight of formal sponsorship."}]},
+{w:9,title:"Write your recovery story — the full version, to potentially share",why:"Your story is an asset. Not just to you — to anyone who is where you were. Writing it fully prepares it to be shared in whatever form is right.",acct:"Format: what my life was like, what happened, what it's like now. Don't clean it up. The messy parts help people.",tags:["meaning","all"],deepen:{practice:"After writing the full version, write a 2-minute version — one you could share at a meeting without running over.",prompts:["What part of my story am I most ashamed to include — and is that exactly the part that would most help someone?"],challenge:"Share your story in some form before 90 days is over."},alts:[{title:"Record a voice or video testimony to share in an online recovery community",why:"Digital testimony reaches people in private crisis who never attend meetings."},{title:"Submit your story to a recovery organization that shares lived experience narratives",why:"Published stories create lasting records that can help people for years."}]},
+{w:9,title:"Facilitate or lead one part of a meeting, workshop, or group",why:"Standing up, taking space, holding the room — these are the opposite of the hiding that addiction often requires. Even leading a brief check-in is practice.",acct:"Ask to lead the opening, the reading, or the topic at your next meeting.",tags:["social","meaning","all"],deepen:{practice:"After you facilitate, write about it: what was hard, what surprised you, what you learned about yourself in the role.",prompts:["What does it feel like to take up space in a room rather than shrink in it?"],challenge:"Commit to a recurring leadership role — not one event, but ongoing presence and responsibility."},alts:[{title:"Start or co-facilitate a small group for people at a similar stage in recovery",why:"Peer-led groups for specific stages are often more useful because the experience base is shared."},{title:"Offer to give a talk at a treatment center about your experience",why:"Treatment centers regularly bring in people with lived experience. Your story has therapeutic value."}]},
+{w:9,title:"Identify a gap in your recovery community and think about how you could fill it",why:"The most sustainable service comes from noticing what's missing and deciding to be the person who does something about it. At 90 days, you know enough to see what's missing.",acct:"Write one specific gap. Then write one sentence about what you could do.",tags:["meaning","social","all"],deepen:{practice:"Talk to someone with more recovery experience about what you've noticed. Ask: 'Has anyone tried to address this? What happened? What would it take?'",prompts:["What would have helped me most that didn't exist when I needed it?","What am I uniquely positioned to create based on who I am and what I've been through?"],challenge:"Take one concrete step toward filling the gap this week."},alts:[{title:"Research how recovery programs and resources came to exist — everything was started by someone who saw a need",why:"Understanding this is permission to start something yourself."},{title:"Connect with a local recovery advocate and ask how you can contribute to existing efforts",why:"Working within existing efforts is often more effective than starting from scratch."}]},
+{w:9,title:"Start building one hobby that has nothing to do with recovery",why:"Whole people have more than their healing. A hobby — something you do for no reason other than that it brings you alive — is one of the clearest signs that you are building a life, not just maintaining sobriety. It also gives your brain a healthy place to put its energy.",acct:"Name the hobby. Do something related to it today — watch a tutorial, buy one small supply, sign up for a class, pick up the instrument. Start small. Start today.",tags:["creative","meaning","all"],deepen:{practice:"Think about what you were drawn to before addiction crowded everything out. Or what you've always been curious about but told yourself wasn't for you. That curiosity is information. Follow it.",prompts:["What did I love doing as a kid that I've completely forgotten about?","What would I try if I knew I wouldn't be judged for being a beginner?"],challenge:"Do something related to this hobby three times this week — even for 15 minutes each time. Notice what it feels like to do something purely for yourself."},alts:[{title:"Take a free class or workshop in something you've never tried before",why:"Learning something new as a beginner rebuilds confidence and curiosity — two things recovery can quietly erode."},{title:"Join a community organized around an interest — a hiking group, book club, art class — that has nothing to do with recovery",why:"Building friendships around shared interests expands who you are beyond your history."}]},
+{w:9,title:"Evaluate your living environment for long-term recovery support",why:"Where you live, who you live with, and what your environment contains are among the most powerful predictors of long-term recovery.",acct:"Write an honest assessment: does my living situation support my recovery? What specifically helps? What would need to change?",tags:["structure","all"],deepen:{practice:"Research recovery housing in your area even if you don't need it — knowing what exists means you can help someone else find it.",prompts:["What about my home environment makes recovery easier? What makes it harder?"],challenge:"Make one physical change to your living space this week that actively supports your recovery."},alts:[{title:"Have an honest conversation with the people you live with about what you need from your shared environment",why:"Recovery happens in context. The people around you need to understand what helps and what doesn't."},{title:"Research sober living houses as options or as resources to know about",why:"Even if you don't need it, knowing it exists means you can refer someone who does."}]},
+{w:9,title:"Develop a plan for navigating high-risk holidays, events, or seasons",why:"Predictable high-risk times require preparation, not willpower. Willpower runs out. Plans don't.",acct:"Write your next three high-risk events or time periods. For each: who you'll be with, what triggers might arise, and what your plan is.",tags:["cravings","structure","all"],deepen:{practice:"Build a specific 'event protocol' for the highest-risk occasion: how you'll arrive, who you'll stay in contact with, your exit strategy, and what you'll do immediately after.",prompts:["What high-risk event am I most tempted to just 'hope it goes okay'?"],challenge:"Share your high-risk event plan with your sponsor before the event."},alts:[{title:"Rehearse exactly what you'll say if offered a substance at an upcoming event",why:"Rehearsal removes real-time cognitive load. You don't have to think — just do the thing you already decided."},{title:"Plan an alternative activity during a high-risk time period",why:"Sometimes the best plan is simply not being in the high-risk environment. That is wisdom, not avoidance."}]},
+{w:9,title:"Address one major avoided life area — legal, financial, or medical",why:"Addiction leaves a wake. At 90 days, you are stable enough to begin addressing things that have been too overwhelming to face. Facing them transforms background dread into manageable problems.",acct:"Name the one area you've been most avoiding. Identify the single first step. Take it today or schedule it this week.",tags:["structure","meaning","all"],deepen:{practice:"For legal or financial issues, research free or low-cost resources: legal aid organizations, credit counseling, bankruptcy attorneys offering free consultations. These problems have professional solutions.",prompts:["What is the thing I least want to face and most need to?"],challenge:"Tell your sponsor or therapist about this avoided area and ask them to check in weekly until you've taken the first step."},alts:[{title:"Work with a social worker who specializes in recovery to navigate practical life challenges",why:"Social workers know the system. Asking for help navigating it is intelligent."},{title:"Research legal aid organizations if legal issues are the avoided area",why:"Many legal issues faced in recovery have specialized resources and advocates."}]},
+{w:9,title:"Create a 90-day celebration that honors how far you've come",why:"Milestones matter not because sobriety is a performance but because your brain needs concrete markers of progress.",acct:"Plan it now. What will you do, who will you invite or tell, and what will make it feel real?",tags:["meaning","all"],deepen:{practice:"Write a letter to yourself on day one. Tell them what you now know. Tell them what it cost and what it gave you. Read it at your celebration.",prompts:["What would day-one me not believe about where I am now?"],challenge:"Do the celebration you planned. Let it be witnessed by at least one person who knows what this milestone means."},alts:[{title:"Share your 90-day milestone in your recovery community",why:"Letting others witness your milestone is a gift to you and to them."},{title:"Do something physically challenging to mark 90 days — a hike, a race, anything day-one you couldn't have done",why:"Physical proof of change is a different kind of evidence than emotional proof."}]},
+{w:10,title:"Create a one-year financial plan — revenue, expenses, and one savings goal",why:"Financial instability is one of the most common relapse triggers. A plan — even a rough one — converts anxiety into action.",acct:"Write: monthly income, monthly essential expenses, monthly discretionary spending. Then identify one financial goal for the year.",tags:["structure","meaning","all"],deepen:{practice:"Research free financial counseling resources — available through community organizations, credit unions, and nonprofits.",prompts:["What financial mess from my addiction am I most afraid to look at?","What would financial stability allow me to do that I can't do now?"],challenge:"Share your financial plan with someone you trust — then take one concrete financial action this week."},alts:[{title:"Research financial literacy resources for people in recovery",why:"Financial recovery is as real as emotional recovery."},{title:"Open a savings account — even with $5 — and set up automatic transfers, however small",why:"The habit of saving, not the amount, is what you're building."}]},
+{w:10,title:"Research one educational or career advancement opportunity and take the first step",why:"Addiction often derails education and career. Recovery is the chance to return to interrupted paths or begin new ones.",acct:"Identify one specific opportunity: a program, certification, job application, or career conversation. Take one step today.",tags:["meaning","structure","all"],deepen:{practice:"Many institutions and employers have specific programs for people in recovery. Research scholarship opportunities, vocational rehabilitation programs, and recovery-friendly employers.",prompts:["What did I want to be before addiction got in the way?"],challenge:"Have one informational interview — with someone in a field you're interested in — within the next two weeks."},alts:[{title:"Update your resume — even if you're not job-searching yet",why:"A current resume is an act of readiness."},{title:"Research vocational rehabilitation services in your state — many specifically serve people in recovery",why:"Vocational rehabilitation is a right, not a charity."}]},
+{w:10,title:"Evaluate your current relationships — who gives, who takes, and what you want more of",why:"The company you keep in recovery is the environment in which you either grow or stagnate.",acct:"List the five people you spend the most time with. For each: does this relationship make recovery stronger or harder?",tags:["relationships","meaning","all"],deepen:{practice:"This is not about cutting people off — it's about understanding what each relationship requires. Some need to be paused, not ended. Others need deeper investment.",prompts:["Who in my life believes in my recovery even when I don't?"],challenge:"Have one honest conversation with someone in your inner circle about what you need from the relationship going forward."},alts:[{title:"Research codependency and healthy interdependence as they apply to recovery",why:"Many relationships that feel supportive are actually codependent."},{title:"Talk to your therapist about who from your past you may need to grieve or release",why:"Some relationships in recovery need to be mourned before they can be released."}]},
+{w:10,title:"Build or update your long-term recovery support structure",why:"The informal support that got you through the first 90 days may not be sufficient for year two. Month three is when you deliberately architect a support system that is sustainable.",acct:"Write: your primary support (1 person), your community (1 meeting or group), professional support (1 therapist), emergency contacts (2 people for any hour), your daily practice (1 non-negotiable).",tags:["loneliness","structure","relationships","all"],deepen:{practice:"For each element, write: how solid is this, and what would make it more solid? Active evaluation prevents passive drift.",prompts:["What part of my support structure would collapse first under significant stress?"],challenge:"Have an honest conversation with each element of your support structure this month about whether you're still the right fit."},alts:[{title:"Create a 'recovery portfolio' — all support contacts, meeting times, resources, and emergency plan in one document",why:"Having everything in one place means you can access it when you're least capable of searching."},{title:"Research recovery housing as a long-term environment option, even if you don't need it now",why:"Even if you don't need it, knowing it exists means you can refer someone who does."}]},
+{w:10,title:"Write a five-year vision for your life — specific, honest, and ambitious",why:"People who have a detailed, specific vision of what they're building are significantly more likely to build it.",acct:"Write for 30 minutes. Cover: where you live, who you're close to, what you do for work, how you spend a typical Tuesday, what you've accomplished.",tags:["meaning","all"],deepen:{practice:"After writing the vision, write what needs to be true in year one, two, and three to arrive at year five. Work backward.",prompts:["What do I want to be true that currently feels impossible?"],challenge:"Share your five-year vision with one person who can hold you accountable."},alts:[{title:"Create a vision board — physical or digital — representing what you're building",why:"Visual representation activates different neural pathways than written language."},{title:"Work backward from your five-year vision to create a specific one-year plan",why:"Reverse engineering a vision makes it actionable."}]},
+{w:10,title:"Have the hard family conversation you've been putting off",why:"Family relationships often hold the deepest wounds from addiction — and the greatest potential for repair. At 90 days, you have enough stability to begin these conversations with appropriate support.",acct:"Name the conversation. Talk to your sponsor or therapist before having it. Then have it.",tags:["relationships","emotions","all"],deepen:{practice:"Research Al-Anon, Nar-Anon, and CRAFT as resources for family members. One of the most valuable things you can offer family is knowing that support exists specifically for them.",prompts:["What do I need my family to understand that they probably don't?"],challenge:"Suggest to one family member that they attend a family recovery resource. Offer to find the information for them."},alts:[{title:"Invite a family member to an open meeting or educational event about addiction and recovery",why:"Understanding what you went through changes how families relate to the person in recovery."},{title:"Write a letter to your family about what recovery has meant — not as an amends, but as a bridge",why:"Sometimes the letter that clears the air is the one that comes before the harder conversation."}]},
+{w:10,title:"Research what recovery advocacy looks like at a community or policy level",why:"The stigma, legal barriers, and treatment gaps that made your recovery harder are not inevitable. They are the result of policy. And policy is changed by people who show up.",acct:"Research: Faces and Voices of Recovery, Young People in Recovery, or local recovery advocacy groups. Write one thing you learned and one way you could get involved.",tags:["meaning","learning","all"],deepen:{practice:"Consider sharing your recovery story in an advocacy context — with a legislator, at a public hearing, in a letter to a local paper. Your story is a policy argument.",prompts:["What system made my recovery harder than it needed to be?"],challenge:"Attend one recovery advocacy event or online meeting. You don't have to speak. Just be present."},alts:[{title:"Write a letter to your elected representative about one recovery-related issue that matters to you",why:"Constituent letters have more impact than most people believe."},{title:"Share your recovery story in a public forum",why:"Public storytelling changes how communities think about addiction."}]},
+{w:10,title:"Do something that scared the early-recovery version of you that no longer does",why:"Progress in recovery is most visible in retrospect. Doing something that was once impossible and noticing it is now ordinary is the most concrete form of evidence that recovery is real.",acct:"Name the thing. Do it. Write two sentences about the difference between then and now.",tags:["meaning","all"],deepen:{practice:"Write a full before-and-after: what this thing represented in early recovery, what it took to attempt, what it feels like now.",prompts:["What was I most afraid I'd never be able to do sober?"],challenge:"Name three more things that once felt impossible and now feel possible or easy."},alts:[{title:"Return somewhere that was once a trigger and notice what it's like now",why:"Returning to previously impossible environments with the full capacity of recovery is profound evidence of change."},{title:"Take on a role or relationship that early-recovery you would have said you weren't ready for",why:"Taking on weight you previously couldn't carry is strength training."}]},
+{w:10,title:"Make a specific plan for what comes after 90 days",why:"90 days is a milestone, not a finish line. People who treat it as an ending are at greater risk. What comes next needs a plan.",acct:"Write: what meetings or communities will I stay connected to? What professional support continues? What practices do I keep? What new challenges am I ready for?",tags:["structure","meaning","all"],deepen:{practice:"Talk to people at 6 months, 1 year, and 5 years of recovery. Ask: what is different at those stages? Their answers are your roadmap.",prompts:["What am I most afraid of about maintaining recovery without a milestone to work toward?"],challenge:"Write a 'recovery constitution' — the non-negotiables, practices, people, and principles defining your ongoing commitment."},alts:[{title:"Design a 90-day plan for the next quarter of your recovery",why:"A rolling 90-day framework keeps recovery structured without the pressure of thinking about forever."},{title:"Identify what 'long-term recovery' means to you personally — what it looks like, feels like, and requires",why:"Defining your own destination prevents defaulting to someone else's."}]},
+{w:10,title:"Celebrate 90 days in a way that is entirely your own",why:"You have done something that many people who needed it desperately were not able to do. That is worth honoring — not because you've arrived, but because you've proven you can go the distance.",acct:"Plan something genuinely meaningful to you — not a performance of celebration, but something that actually honors this.",tags:["meaning","all"],deepen:{practice:"Invite people who were part of this journey to witness the person you've become. Being seen in your strength is different from being helped through your weakness.",prompts:["What would make this celebration feel genuinely mine?"],challenge:"Tell the story of your 90 days to at least one person who wasn't there for it — not as a cautionary tale, but as a story of becoming."},alts:[{title:"Do something adventurous or physically challenging as your celebration",why:"Physical celebration is a different register than emotional or social. Use all the registers."},{title:"Create something lasting to mark the milestone — writing, art, a photograph",why:"Making something that will outlast the day makes the milestone real in a different way."}]}
+,{w:10,title:"Proactively reach out to someone newer in recovery — don't wait to be asked",why:"At 90 days you have something most people in early recovery are desperate for: evidence that it can be done. Reaching out first — without being asked — is the kind of initiative that changes someone's week. Maybe their trajectory.",acct:"Think of one person you know who is earlier in their recovery than you are. Text, call, or find them at a meeting. Say: 'I've been thinking about you. How are you actually doing?' That's it. Just reach out first.",tags:["social","meaning","relationships","all"],deepen:{practice:"Make this a habit rather than a one-time act. Identify two or three people you'll check in with regularly — not as their sponsor, not with any formal commitment, just as someone who shows up. That consistency is more valuable than any single grand gesture.",prompts:["Who in my recovery community looks like they might be struggling but hasn't said anything?","What would it have meant to me in my first 30 days if someone had reached out to me first?"],challenge:"Send one unprompted check-in text to someone in early recovery every week for the rest of the month. No agenda. Just presence."},alts:[{title:"Share something you've learned — a specific tool, a resource, a realization — with someone who is where you were",why:"Practical, specific help is more useful than general encouragement."},{title:"Invite someone newer to recovery to join you for coffee, a walk, or a meeting — make it concrete and specific",why:"Vague availability is easy to decline. A specific invitation is not."}]},
+{w:10,title:"Write a full honest inventory of who you are right now — not who you were, not who you're becoming",why:"You spend a lot of time in recovery looking at the past (what happened) and the future (where you're going). Today is for the present: who are you, right now, at this exact point? What do you believe? What do you care about? What kind of person shows up in your daily life?",acct:"Write for 20 minutes with this prompt: 'Right now, at this point in my recovery, I am someone who...' Fill that in as many times as you can. Don't filter. Some of it will surprise you.",tags:["meaning","emotions","all"],deepen:{practice:"After writing, read it back and circle the three descriptions that feel most true and most important. Those are the core of who you are right now. They're also the foundation of who you're becoming.",prompts:["What part of who I am right now would have been impossible to write a year ago?","Which description on my list am I most proud of, and which one am I still working toward?"],challenge:"Share this inventory with your therapist, sponsor, or one close person. Not for feedback — just to be witnessed."},alts:[{title:"Ask three people who know you well: 'How would you describe who I am right now?' Compare their answers to your own.",why:"External perspective on identity is often more accurate and kinder than our internal assessment."},{title:"Write two versions: who I am on a hard day, and who I am on a good day. Notice what stays the same in both.",why:"The constant across both versions is your character. The variable is your circumstances."}]},
+{w:10,title:"Do something completely outside your comfort zone that has nothing to do with recovery",why:"Growth in recovery is not only about healing from the past. It's also about expanding what you're capable of in the present. Doing something genuinely outside your comfort zone — not as a recovery exercise, just as a person being brave — builds a different kind of confidence.",acct:"Name the thing and do it this week. A physical challenge, a creative risk, a social stretch, a new experience — anything that makes you a little nervous in a non-recovery context. Then write one sentence about what it felt like.",tags:["meaning","creative","all"],deepen:{practice:"Notice what your comfort zone has been in recovery. For many people, it narrows — the same meetings, same people, same routes. Expanding it intentionally, in any direction, builds a wider life.",prompts:["What is one thing I've been curious about but too comfortable to try?","What would I do if I stopped waiting until I felt ready?"],challenge:"Do one thing per week for the rest of the month that you've never done before. They don't have to be big. They just have to be new."},alts:[{title:"Sign up for a physical challenge — a 5K, a hiking trail, a fitness class you've avoided",why:"Physical courage and emotional courage are connected. Proving to your body that it can do hard things lands differently than telling your mind it can."},{title:"Create something and share it — write something, make something, perform something — with at least one other person",why:"Creating and sharing is vulnerable in a way that builds the same muscles as emotional intimacy."}]},
+{w:10,title:"Reconnect with someone you've drifted from — not to repair damage, just to say hello",why:"Recovery can accidentally shrink your world as you let go of people, places, and situations that weren't good for you. Some of what got left behind was necessary. But some of it was just drift. This is about reaching back out to someone you lost touch with for no dramatic reason — just time and distance.",acct:"Think of one person you were once genuinely connected to that you've simply lost touch with. Send them a message. 'I've been thinking about you. Hope you're doing well.' That's enough to start.",tags:["relationships","social","all"],deepen:{practice:"Before reaching out, write about why you drifted from this person. Was it the addiction? Were you avoiding them? Did life just move on? Understanding the drift helps you reconnect with intention rather than guilt.",prompts:["Who have I missed without doing anything about it?","What kind of friend do I want to be going forward, and does how I maintain relationships reflect that?"],challenge:"Reach out to two people you've drifted from this week. Not to explain or apologize — just to say you've been thinking of them."},alts:[{title:"Write a letter to someone you've lost touch with — even if you never send it",why:"The act of writing clarifies what you actually want to say, which makes reaching out feel less daunting."},{title:"Attend one social event or gathering outside of your recovery community to rebuild connections in other areas of your life",why:"A full life requires friendships and community in multiple spheres."}]},
+{w:10,title:"Identify one thing you're still using recovery as an excuse to avoid — and take one step toward it",why:"Recovery language can sometimes become a comfortable reason to delay things we're afraid of. 'I'm not ready yet.' 'I'm still healing.' Sometimes that's true. But sometimes it's an excuse. The difference is worth examining honestly.",acct:"Write down the thing. Then ask yourself honestly: am I avoiding this because I'm genuinely not ready, or because it's easier to stay where I am? If it's the latter, write one first step and take it this week.",tags:["structure","meaning","all"],deepen:{practice:"Bring this to your therapist or sponsor and ask them honestly: 'Is there something you've noticed me avoiding that you haven't said anything about?' Their answer might be the most useful thing you hear this week.",prompts:["What would I have done by now if I had stopped waiting until I felt completely ready?","What does 'not ready' actually mean, and is that still true?"],challenge:"Take the first step toward the avoided thing this week — even if it's just making a phone call, doing one hour of research, or telling one person about your intention."},alts:[{title:"Make a list of five things you've been postponing 'until recovery is more settled' — and rank them by how ready you actually are",why:"A list makes the avoidance visible. Ranking it makes it actionable."},{title:"Ask someone you trust to hold you accountable to one specific step on a specific timeline",why:"External accountability converts intention into action more reliably than internal motivation alone."}]},
+{w:10,title:"Spend time with someone who is not in recovery and invest in that friendship genuinely",why:"A recovery-only social world is easier but smaller. Maintaining friendships and investing in people outside the recovery community builds a fuller life and makes you a more complete person — which is good for your recovery too.",acct:"Make plans with one person outside your recovery community this week. Show up. Be present. Don't make it about recovery unless they ask. Just be a friend.",tags:["social","relationships","all"],deepen:{practice:"Notice what it feels like to spend time with someone who doesn't know your recovery story and isn't part of that world. Is it relaxing? Uncomfortable? What does that reaction tell you about how much of your identity has become organized around recovery?",prompts:["Who outside of recovery do I want to be closer to, and what's keeping me from investing in that relationship?","What kind of friend am I to people who aren't in recovery?"],challenge:"Make one social plan per week with someone outside your recovery community. Put it in the calendar before you leave this conversation with yourself."},alts:[{title:"Invite a non-recovery friend to do something you genuinely enjoy — not as an obligation, but because you want to",why:"Friendships require investment. Showing up because you want to is different from showing up because you feel you should."},{title:"Write about the friendships in your life that exist outside of recovery — who they are, how often you see them, and whether that reflects how important they are to you",why:"The inventory makes invisible drift visible."}]},
+{w:10,title:"Teach yourself one new practical skill this week",why:"Learning something new — cooking a specific dish, basic home repair, a financial skill, a language phrase, a software tool — builds competence and confidence in a non-recovery context. It also reminds you that you are a person with a growing capacity, not just someone managing a past.",acct:"Pick something practical and learnable in a week. Watch one tutorial. Try once. Try again. The skill itself matters less than the act of learning.",tags:["learning","meaning","all"],deepen:{practice:"Think about what practical skills addiction interrupted or prevented you from developing. Financial literacy, cooking, home care, professional skills — these practical competencies are part of the life you're building.",prompts:["What do I feel embarrassed that I don't know how to do, and is this week's chance to start?","What skill, if I had it, would make daily life feel more manageable or more mine?"],challenge:"Spend 30 minutes every day this week on this skill. Track the change between day one and day seven. Growth is faster than you expect."},alts:[{title:"Ask someone you respect to teach you something they know — make it an exchange of skills or knowledge",why:"Learning from someone you admire deepens the relationship and gives them the gift of being useful to you."},{title:"Research one financial, legal, or professional skill you've been intimidated by and spend one hour genuinely learning it",why:"Practical adult competence is its own form of recovery."}]},
+{w:10,title:"Go somewhere new in your city or town — alone, with intention, with no agenda",why:"Getting out of your habitual geography — the same routes, the same coffee shop, the same few blocks — is a small act of expansion that has disproportionate effects on mood, perspective, and sense of possibility. Recovery can make the world feel smaller. This is a deliberate antidote.",acct:"Pick somewhere you've never been or haven't been in a long time. Go there. Spend at least an hour. Bring nothing to do. Notice what you notice.",tags:["nature","meaning","all"],deepen:{practice:"Pay attention to what it feels like to be a person moving through a new space. Early in recovery, the world often feels dangerous or off-limits. At 90 days, it's worth testing whether that's still true.",prompts:["What parts of the world have felt off-limits to me in recovery, and is that boundary still necessary?","What do I notice about myself when I'm in an unfamiliar place with no agenda?"],challenge:"Go somewhere new once a week for the rest of the month. Keep a single sentence about each one."},alts:[{title:"Take a day trip or short excursion to somewhere you've always meant to go",why:"A change of physical context resets mental context in ways that staying in the same environment cannot."},{title:"Spend an afternoon in a part of your city you rarely visit — a different neighborhood, a park, a museum — with no phone agenda",why:"Presence in a new place builds the capacity for presence generally."}]},
+{w:10,title:"Write about the relationship you have with yourself — and whether it's the relationship you want",why:"You've spent 90 days working on your recovery, your health, your relationships, your purpose. But all of that is built on the foundation of how you relate to yourself — how you talk to yourself on hard days, whether you forgive yourself, whether you trust yourself, whether you actually like who you're becoming.",acct:"Write for 15 minutes on this: How do I treat myself? Am I kind, harsh, fair, forgiving, critical? Is the relationship I have with myself the one I'd want someone I love to have with themselves?",tags:["emotions","meaning","all"],deepen:{practice:"The internal relationship is often the last one people examine in recovery — because it's the most uncomfortable. But it's also the one that underlies everything. If you're still treating yourself like someone who deserves punishment, that will show up everywhere.",prompts:["What would I say to a close friend who was treating themselves the way I treat myself?","What does self-respect look like in practice — not as a concept, but in specific daily moments?"],challenge:"For the next week, notice every time you speak harshly to yourself and consciously replace it with the words you'd use with someone you love. Not toxic positivity — just basic fairness."},alts:[{title:"Talk to your therapist specifically about your relationship with yourself — self-compassion, self-trust, self-forgiveness",why:"These concepts are discussed in recovery but rarely examined as specifically and behaviorally as they deserve to be."},{title:"Write a letter to yourself that you'd want to read on a hard day three years from now",why:"The tone of that letter reveals a lot about how you actually see yourself."}]},
+{w:10,title:"Make one contribution to your community that has nothing to do with recovery",why:"You are a person who happens to be in recovery — not a recovery person who happens to exist. Contributing to your broader community, outside the recovery world, is an act of full citizenship and full personhood. It also builds a sense of belonging that is more durable than any single support structure.",acct:"Volunteer for one non-recovery community effort this week — a neighborhood cleanup, a food bank shift, a school event, a local organization. Show up as a community member, not as someone in recovery.",tags:["meaning","social","all"],deepen:{practice:"Notice what it feels like to contribute to something that has no relationship to your addiction history. You are just a person helping. That identity — a person who shows up and helps — is one of the most stable identities available to a human being.",prompts:["What community do I belong to beyond recovery — neighborhood, faith, profession, interest?","What would it mean to be known in my community for something other than my recovery?"],challenge:"Make this kind of non-recovery community contribution a monthly practice. Put it in the calendar."},alts:[{title:"Join a local organization, club, or committee that works on something you care about and attend one meeting",why:"Sustained community involvement builds belonging and purpose in ways that one-time acts don't."},{title:"Do something specifically for your immediate neighbors or local community — a practical, tangible act of citizenship",why:"The smallest unit of community is the people nearest to you. Start there."}]}
+];
+
+const WEEKLY_BANK=[
+  {w:1,title:"Stabilize your body and your environment",why:"The first week is about reducing chaos — internally and externally. Sleep, hydration, basic nutrition, and a safe physical space are not luxuries. They are the floor.",acct:"Rate your sleep, food, and environment each evening 1–5. No judgment — just notice.",tags:["all"]},
+  {w:1,title:"Take it one day at a time — literally",why:"Thinking about 30, 60, or 90 days can be paralyzing in week one. The practice is returning to today every time your mind goes to the big picture.",acct:"End each day writing one sentence: 'Today I did ____.'",tags:["structure","grounding","all"]},
+  {w:2,title:"Build one keystone habit and do it every single day",why:"A keystone habit pulls other habits into place. Pick yours and do it every day — consistency is the thing.",acct:"Name the habit before the week starts. Track it daily. Miss a day, start again without self-punishment.",tags:["all"]},
+  {w:2,title:"Expand your support network by at least one",why:"Recovery is not a solo project. Add one person, meeting, or community to your support system this week.",acct:"Write the name or meeting. Show up at least once.",tags:["loneliness","social","all"]},
+  {w:3,title:"Do the inner work — one honest look at your patterns",why:"By week three the adrenaline fades. Real growth happens here if you're willing to look beneath the behavior.",acct:"Journal 10 minutes each day this week with no agenda. Write what comes, not what sounds right.",tags:["emotions","all"]},
+  {w:3,title:"Reconnect with who you are outside of this struggle",why:"Addiction can consume identity. Week three is for recovering the person underneath.",acct:"Do one thing this week purely because it's yours — not productive, not expected. Just because.",tags:["meaning","creative","all"]},
+  {w:4,title:"Celebrate what you've built and face what still frightens you",why:"This week holds two truths: you have done something real, and there is still real work ahead. Honor both.",acct:"One honest conversation this week: what are you most proud of, and what still frightens you?",tags:["all"]},
+  {w:4,title:"Build the infrastructure for what comes after this month",why:"The transition out of a structured first month is one of the most vulnerable times. Plans for meetings, check-ins, and hard days turn fragile hope into durable infrastructure.",acct:"Write your post-month plan. Share it with one person who will hold you to it.",tags:["structure","all"]},
+  {w:5,title:"Take care of your body like it's your most important recovery tool",why:"Month two is when physical health moves from 'eventually' to 'now.' Sleep, bloodwork, dental care, and mental health support are the infrastructure of sustained recovery.",acct:"Book one appointment this week you've been putting off — physical, mental, or dental.",tags:["physical","all"]},
+  {w:5,title:"Build your medical support team",why:"A doctor who knows your recovery, a therapist who understands addiction, a dentist you're not hiding from — this is the team that makes recovery sustainable. Add one member this week.",acct:"Research, call, or book one appointment. Write down who you contacted.",tags:["physical","structure","all"]},
+  {w:6,title:"Let service change you — not just the people you serve",why:"The transformation from service is internal. You don't do it to feel good. You do it and feel good as a side effect.",acct:"One service act per day this week, ranging from anonymous to structured. Track how each one feels.",tags:["meaning","social","all"]},
+  {w:6,title:"Build one ongoing service commitment that requires your presence",why:"One-time service is good. Recurring service is transformative. The difference is accountability to something outside your recovery.",acct:"Name the commitment, the frequency, and one person who will notice if you stop.",tags:["structure","meaning","all"]},
+  {w:7,title:"Practice the skills of real connection — deliberately",why:"Connection is not automatic. It's a practice with specific skills: listening, sharing at the right depth, asking follow-up questions, staying when it gets awkward.",acct:"Practice one connection skill per day: listen without advising, share something real, ask a genuine follow-up, stay with someone's discomfort.",tags:["loneliness","relationships","all"]},
+  {w:7,title:"Let someone really know you — one conversation at a time",why:"Intimacy is built in accumulated moments of genuine sharing and being received.",acct:"After each meaningful conversation, write one sentence: 'Today I shared _____ and they said/did _____.'",tags:["relationships","loneliness","all"]},
+  {w:8,title:"Clarify who you are and what you're building",why:"Identity in recovery is not found — it's built deliberately through values, choices, and commitments.",acct:"Write your values, your mission for this season, and one goal in each of three life areas. Share it.",tags:["meaning","all"]},
+  {w:8,title:"Invest in your life outside of recovery",why:"A life worth staying sober for contains more than sobriety. Invest in something entirely yours this week.",acct:"Name the thing. Take one concrete step. Do it for yourself, not as therapy.",tags:["meaning","creative","all"]},
+  {w:9,title:"Step into leadership in your recovery community",why:"At 90 days, you have something to offer no one else has: your specific experience, at this specific stage, honestly shared.",acct:"Take one leadership or mentorship role this week. Show up for someone who is where you were.",tags:["meaning","social","all"]},
+  {w:9,title:"Begin to address the practical aftermath of addiction",why:"Recovery has external dimensions: legal, financial, medical, relational. Month three is when you're stable enough to address them systematically.",acct:"Identify the external area causing the most background stress. Take the first step this week.",tags:["structure","all"]},
+  {w:10,title:"Plan the life you're building, not just the sobriety you're maintaining",why:"Recovery is not a destination. It's the condition under which you build the rest of your life. Month three is when you start building in earnest.",acct:"Write your one-year plan across three areas: health, relationships, and purpose. Share it.",tags:["meaning","structure","all"]},
+  {w:10,title:"Let the milestone land — and then plan what comes next",why:"90 days is real. Honor it. And then decide what comes next — because the work continues and the structure that got you here needs to evolve.",acct:"Celebrate 90 days in a way that is entirely yours. Then write your commitments for the next 90.",tags:["all"]}
+];
+const MONTHLY_BANK=[
+  {title:"Show up for yourself every single day",why:"This month asks one thing: don't abandon yourself. Not perfection — presence. Every day you show up for your recovery is a vote for the person you're becoming.",acct:"At the end of each day, ask: Did I show up for myself today? A yes, no, or 'kind of' is all you need.",tags:["all"],month:1},
+  {title:"Rebuild the foundation — body, mind, and routine",why:"The first month of recovery is about rebuilding the basic infrastructure of a life: sleep, nutrition, movement, and structure. These aren't optional. They are the ground everything else grows from.",acct:"Track sleep, water, movement, and one daily habit each week. No judgment — just build the awareness.",tags:["structure","physical","all"],month:1},
+  {title:"Learn to sit with yourself",why:"Addiction often develops as a solution to the discomfort of being alone with your own thoughts. This month, the practice is learning that you can be present with yourself — with all of it — without running.",acct:"Ten minutes of unstructured quiet each day. No phone, no input. Just notice what comes up.",tags:["emotions","grounding","spiritual","all"],month:1},
+  {title:"Find your people",why:"The research on long-term recovery is consistent: connection is protective and isolation is the greatest risk factor. This month, move toward people — even when it's uncomfortable.",acct:"Track every meaningful human interaction this month. A text counts. Community is built one exchange at a time.",tags:["loneliness","social","relationships","all"],month:1},
+  {title:"Invest in your body and your mind like your recovery depends on it — because it does",why:"Month two is when physical and mental health care moves from intention to action. A doctor who knows your recovery, a therapist who understands addiction, and basic physical maintenance are not luxuries. They are infrastructure.",acct:"Book one appointment this month you've been putting off. Go to it. Be honest when you get there.",tags:["physical","structure","all"],month:2},
+  {title:"Become someone who gives, not just someone who receives",why:"Service is not a phase of recovery — it's a pillar of it. This month, you practice moving from the person who needed to be helped to the person who shows up for others. Both versions of you are real.",acct:"One act of service per week. Name it before the week starts. Track how it feels, not just that you did it.",tags:["meaning","social","all"],month:2},
+  {title:"Learn the skills of real connection",why:"Most of us were never taught how to let people in. This month, connection becomes a practice with specific techniques: the conversational volley, calibrated vulnerability, asking for what you need directly, repairing what's broken.",acct:"One conversation per week where you practice a specific skill: share something real, ask a genuine follow-up, use the repair format, or simply listen without fixing.",tags:["loneliness","relationships","all"],month:2},
+  {title:"Build the life you're staying sober for",why:"Recovery without a vision is just absence. This month, you build the architecture of what you're creating: your values, your purpose, your goals, and the identity that is emerging through everything you've done so far.",acct:"Write your values, your mission statement, and one goal in each of three life areas. Put the mission statement somewhere you'll see it every day.",tags:["meaning","all"],month:2},
+  {title:"Become the person you needed when you were struggling",why:"At 90 days, you have experience, perspective, and hard-won knowledge that someone else desperately needs. This month, step into mentorship, leadership, and service at a level that requires something of you.",acct:"Identify one person to support, one leadership role to take on, and one practical life area to address. Check in on all three weekly.",tags:["meaning","social","all"],month:3},
+  {title:"Build a life worth staying sober for",why:"Long-term recovery is not just the absence of using. It's the presence of something worth protecting — relationships, purpose, health, contribution. This month, you build that something, deliberately and with intention.",acct:"Write your five-year vision. Share it with one person. Take one step toward it this week.",tags:["meaning","structure","all"],month:3}
+];
+// ── STATE ──────────────────────────────────────────
+let ST={ms:null,q:0,ans:{},plan:null,tab:'daily',openDay:null,doneD:new Set(),doneW:new Set(),doneM:false,alt:{},wex:null,deepenOpen:false};
+const $=id=>document.getElementById(id);
+const arr=v=>Array.isArray(v)?v:v?[v]:[];
+function save(){try{localStorage.setItem('ssk-rg-'+ST.ms,JSON.stringify({doneD:[...ST.doneD],doneW:[...ST.doneW],doneM:ST.doneM,alt:ST.alt}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('ssk-rg-'+ST.ms)||'null');if(d){ST.doneD=new Set(d.doneD);ST.doneW=new Set(d.doneW);ST.doneM=d.doneM||false;ST.alt=d.alt||{}}}catch(e){}}
+function show(id){['s-intro','s-q','s-guide'].forEach(s=>$(s).classList.remove('on'));$(id).classList.add('on');}
+
+// ── INTRO ──────────────────────────────────────────
+function pickMs(ms,el){ST.ms=ms;document.querySelectorAll('.ms-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');$('intro-btn').disabled=false;}
+function startQ(){show('s-q');renderQ();}
+
+// ── QUESTIONS ──────────────────────────────────────
+function renderQ(){
+  const qs=getQuestions(ST.ms),q=qs[ST.q],pct=Math.round((ST.q+1)/qs.length*100);
+  $('qprog').style.width=pct+'%';
+  $('qnum').textContent='Question '+(ST.q+1)+' of '+qs.length;
+  $('qtext').textContent=q.text;
+  $('qmulti').style.display=q.type==='many'?'block':'none';
+  $('qback').style.visibility=ST.q===0?'hidden':'visible';
+  $('qnext').textContent=ST.q===qs.length-1?'Build my plan →':'Continue →';
+  const cur=arr(ST.ans[q.id]);
+  $('qopts').innerHTML=q.opts.map((o,i)=>`<button class="opt${cur.includes(o)?' sel':''}" data-qi="${ST.q}" data-i="${i}" data-type="${q.type}"><span class="opt-dot">${cur.includes(o)?'✓':''}</span><span>${o}</span></button>`).join('');
+  document.querySelectorAll('[data-qi]').forEach(btn=>{
+    btn.onclick=()=>{
+      const qi=+btn.dataset.qi,i=+btn.dataset.i,type=btn.dataset.type,q=qs[qi],o=q.opts[i];
+      if(type==='one'){
+        ST.ans[q.id]=o;
+        document.querySelectorAll(`[data-qi="${qi}"]`).forEach(b=>{b.classList.remove('sel');b.querySelector('.opt-dot').innerHTML='';});
+        btn.classList.add('sel');btn.querySelector('.opt-dot').innerHTML='✓';
+      } else {
+        const cur=arr(ST.ans[q.id]),idx=cur.indexOf(o);
+        if(idx>-1){cur.splice(idx,1);btn.classList.remove('sel');btn.querySelector('.opt-dot').innerHTML='';}
+        else{cur.push(o);btn.classList.add('sel');btn.querySelector('.opt-dot').innerHTML='✓';}
+        ST.ans[q.id]=cur;
+      }
+    };
+  });
+}
+function prevQ(){if(ST.q>0){ST.q--;renderQ();}}
+function nextQ(){const qs=getQuestions(ST.ms);if(ST.q<qs.length-1){ST.q++;renderQ();}else buildPlan();}
+
+// ── PLAN ASSEMBLY ──────────────────────────────────
+function buildPlan(){
+  const hard=ST.ans.hard||'',joy=arr(ST.ans.joy),goal=arr(ST.ans.goal);
+  const tags=['all'];
+  if(hard.includes('craving'))tags.push('cravings');
+  if(hard.includes('Loneliness'))tags.push('loneliness');
+  if(hard.includes('structure'))tags.push('structure');
+  if(hard.includes('emotions'))tags.push('emotions');
+  if(hard.includes('Repairing'))tags.push('relationships');
+  if(hard.includes('meaning'))tags.push('meaning');
+  if(joy.some(j=>j.includes('nature')))tags.push('nature');
+  if(joy.some(j=>j.includes('Creative')))tags.push('creative');
+  if(joy.some(j=>j.includes('fitness')))tags.push('fitness');
+  if(joy.some(j=>j.includes('Spiritual')))tags.push('spiritual');
+  if(joy.some(j=>j.includes('people')))tags.push('social');
+  if(joy.some(j=>j.includes('Learning')))tags.push('learning');
+  if(joy.some(j=>j.includes('Animals')))tags.push('animals');
+  if(goal.some(g=>g.includes('Physical')))tags.push('physical');
+  if(goal.some(g=>g.includes('Rebuilding')))tags.push('relationships');
+  function score(item){return item.tags.reduce((n,t)=>n+(tags.includes(t)?1:0),0);}
+
+  // Each segment is self-contained — only its own bank, correct day numbering
+  // Days 1–30  (ms=30): DAILY_BANK  weeks 1-4, day offset  0, months 1-4, monthly month 1
+  // Days 31–60 (ms=60): DAILY_BANK_60 weeks 5-8, day offset 30, weekly 5-8, monthly month 2
+  // Days 61–90 (ms=90): DAILY_BANK_90 weeks 9-10, day offset 60, weekly 9-10, monthly month 3
+  const cfg = {
+    30: {bank:DAILY_BANK,    weeks:[1,2,3,4],  slots:[10,10,5,5], offset:0,  wRange:[1,4],  month:1},
+    60: {bank:DAILY_BANK_60, weeks:[5,6,7,8],  slots:[10,10,5,5], offset:30, wRange:[5,8],  month:2},
+    90: {bank:DAILY_BANK_90, weeks:[9,10],     slots:[10,20],     offset:60, wRange:[9,10], month:3}
+  }[ST.ms];
+
+  const daily=[];
+  cfg.weeks.forEach((w,wi)=>{
+    const pool=[...cfg.bank].filter(t=>t.w===w).sort((a,b)=>score(b)-score(a));
+    const slots=cfg.slots[wi];
+    for(let i=0;i<slots;i++)daily.push({...pool[i%pool.length],day:cfg.offset+daily.length+1});
+  });
+
+  const weekly=[];
+  for(let w=cfg.wRange[0];w<=cfg.wRange[1];w++){
+    const opts=WEEKLY_BANK.filter(t=>t.w===w).sort((a,b)=>score(b)-score(a));
+    if(opts.length)weekly.push({...opts[0],week:w});
+  }
+
+  const monthPool=[...MONTHLY_BANK].filter(m=>m.month===cfg.month);
+  const monthly=monthPool.sort((a,b)=>score(b)-score(a))[0]||MONTHLY_BANK[0];
+
+  ST.plan={daily,weekly,monthly};
+  load();
+  renderGuide();
+}
+
+// ── GUIDE ──────────────────────────────────────────
+function renderGuide(){
+  const label={30:'Days 1–30',60:'Days 31–60',90:'Days 61–90'}[ST.ms];
+  const sublabel={30:'Foundation',60:'Building',90:'Momentum'}[ST.ms];
+  $('g-title').textContent=label+' — '+sublabel;
+  $('g-sub').textContent='Click any day to open your challenge';
+  updateTotal();renderCalendar();renderWeekly();renderMonthly();
+  show('s-guide');
+}
+function updateTotal(){
+  const tot=ST.plan.daily.length+ST.plan.weekly.length+1;
+  const done=ST.doneD.size+ST.doneW.size+(ST.doneM?1:0);
+  $('g-total').textContent=done+'/'+tot;
+}
+function showTab(name,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');$('panel-'+name).classList.add('on');
+}
+
+// ── CALENDAR ──────────────────────────────────────
+function renderCalendar(){
+  const days=ST.plan.daily;
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  // Start date — default to today
+  if(!ST.startDate){
+    const t=new Date();
+    ST.startDate=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+  }
+  const start=ST.startDate;
+
+  // Date picker UI
+  const yyyy=start.getFullYear();
+  const mm=String(start.getMonth()+1).padStart(2,'0');
+  const dd=String(start.getDate()).padStart(2,'0');
+
+  let html=`<div class="cal-header">
+    <div class="cal-title">Days ${{30:'1–30',60:'31–60',90:'61–90'}[ST.ms]}</div>
+    <div class="cal-legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--gl);border:1.5px solid var(--g)"></div>Completed</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--p2);border:1.5px solid var(--p3)"></div>Tap to open</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:.625rem;margin-bottom:1.125rem;flex-wrap:wrap">
+    <label style="font-size:.78rem;font-weight:600;color:var(--mt)">Starting date:</label>
+    <input type="date" id="start-picker" value="${yyyy}-${mm}-${dd}" style="font-family:var(--sans);font-size:.82rem;padding:.375rem .625rem;border:1.5px solid var(--bd);border-radius:8px;background:var(--wh);color:var(--tx);cursor:pointer" onchange="changeStart(this.value)">
+    <span style="font-size:.76rem;color:var(--mt)">Ends ${formatDate(new Date(start.getTime()+(days.length-1)*864e5))}</span>
+  </div>`;
+
+  // Build flat day array with real dates
+  const dayItems=days.map((task,i)=>{
+    const date=new Date(start.getTime()+i*864e5);
+    return {task,dayNum:task.day,date};  // task.day is the absolute day (1-30, 31-60, or 61-90)
+  });
+
+  // Group into calendar weeks — each week starts on Sunday
+  // Find the Sunday on or before startDate
+  const startDow=start.getDay(); // 0=Sun
+  // Grid starts at the Sunday of the first week
+  const gridStart=new Date(start.getTime()-startDow*864e5);
+
+  // Total grid cells needed: from gridStart to last day's Saturday
+  const lastDate=dayItems[dayItems.length-1].date;
+  const lastDow=lastDate.getDay();
+  const gridEnd=new Date(lastDate.getTime()+(6-lastDow)*864e5);
+  const totalCells=Math.round((gridEnd-gridStart)/864e5)+1;
+
+  // Build a lookup: dateStr -> dayItem
+  const lookup={};
+  dayItems.forEach(di=>{
+    lookup[dateKey(di.date)]=di;
+  });
+
+  // Render by month sections
+  let currentMonth=-1;
+  let inGrid=false;
+  let weekRow=0;
+
+  for(let c=0;c<totalCells;c++){
+    const cellDate=new Date(gridStart.getTime()+c*864e5);
+    const cellDow=cellDate.getDay();
+    const cellMonth=cellDate.getMonth();
+    const cellYear=cellDate.getFullYear();
+
+    // New month header when month changes (only when the cell is a real recovery day or first of month on Sunday)
+    if(cellMonth!==currentMonth){
+      if(inGrid){html+=`</div>`;inGrid=false;}
+      currentMonth=cellMonth;
+      weekRow=0;
+      html+=`<div style="font-size:.8rem;font-weight:700;color:var(--p3);letter-spacing:.06em;text-transform:uppercase;margin:${c===0?'0':'1.25rem'} 0 .5rem">${MONTHS[cellMonth]} ${cellYear}</div>`;
+      html+=`<div class="dow-row">${DAYS.map(d=>`<div class="dow-cell">${d}</div>`).join('')}</div>`;
+      html+=`<div class="cal-grid">`;
+      inGrid=true;
+      // Fill empty cells before first of month if month starts mid-week
+      if(c===0&&cellDow>0){
+        // Already handled by gridStart being Sunday
+      }
+    }
+
+    // New grid row (week) — insert week label before every 7 cells within a month
+    if(cellDow===0&&c>0){
+      // check if we need a new month header already handled above
+      // just continue in same grid
+    }
+
+    const dk=dateKey(cellDate);
+    const di=lookup[dk];
+
+    if(di){
+      const isDone=ST.doneD.has(di.dayNum);
+      const short=di.task.title.length>28?di.task.title.slice(0,26)+'…':di.task.title;
+      html+=`<div class="cal-cell${isDone?' done':''}" onclick="openDay(${di.dayNum})">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="cal-num">${cellDate.getDate()}</div>
+          <div class="cal-done-tick">✓</div>
+        </div>
+        <div style="font-size:.62rem;color:var(--p);font-weight:600;margin-bottom:2px">Day ${di.dayNum}</div>
+        <div class="cal-task-lbl">${short}</div>
+      </div>`;
+    } else {
+      html+=`<div class="cal-cell empty" style="background:var(--bg);border:1.5px solid transparent;opacity:.4"><div class="cal-num" style="color:var(--bd)">${cellDate.getDate()}</div></div>`;
+    }
+  }
+  if(inGrid)html+=`</div>`;
+  $('panel-daily').innerHTML=html;
+}
+
+function dateKey(d){return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();}
+function formatDate(d){const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return M[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();}
+function changeStart(val){
+  if(!val)return;
+  const parts=val.split('-');
+  ST.startDate=new Date(+parts[0],+parts[1]-1,+parts[2]);
+  renderCalendar();
+}
+
+// ── MODAL ──────────────────────────────────────────
+function openDay(d){
+  ST.openDay=d;ST.deepenOpen=false;
+  renderModal();
+  $('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){if(e.target===$('modal-overlay'))closeModalBtn();}
+function closeModalBtn(){
+  $('modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+  renderCalendar();updateTotal();
+}
+function renderModal(){
+  const d=ST.openDay;
+  const task=ST.plan.daily.find(t=>t.day===d);
+  if(!task)return;
+  const picked=ST.alt[d]??0,isDone=ST.doneD.has(d);
+  const display=picked===0?task:(task.alts[picked-1]||task);
+  const dp=task.deepen,dOpen=ST.deepenOpen;
+  const range={30:'1–30',60:'31–60',90:'61–90'}[ST.ms];
+  $('m-lbl').textContent='Day '+d+' · Days '+range;
+  $('m-title').textContent=display.title;
+  $('m-body').innerHTML=`
+    <div class="why-l">Why this today</div>
+    <div class="why-t">${display.why}</div>
+    <div class="acct-chip">&#128204; ${task.acct}</div>
+    <div class="alt-lbl">Choose your approach</div>
+    ${[{title:task.title,why:task.why},...(task.alts||[])].map((a,i)=>`
+    <button class="alt-opt${picked===i?' picked':''}" onclick="pickAlt(${d},${i})">
+      <div class="alt-radio"></div>
+      <div><div class="alt-main">${i===0?'Recommended: ':''}${a.title}</div><div class="alt-why">${a.why}</div></div>
+    </button>`).join('')}
+    ${dp?`<button class="deepen-btn${dOpen?' open':''}" onclick="toggleDeepen()">
+      <div class="d-icon">${dOpen?'▲':'▼'}</div>
+      <span>${dOpen?'Close deeper practice':'Go deeper with this challenge'}</span>
+    </button>
+    <div class="deepen-panel${dOpen?' open':''}">
+      <div class="dp-section">Extended practice</div>
+      <div class="dp-text">${dp.practice}</div>
+      <div class="dp-section">Reflection prompts</div>
+      ${dp.prompts.map(p=>`<div class="dp-prompt">${p}</div>`).join('')}
+      ${dp.challenge?`<div class="dp-section" style="margin-top:.5rem">Challenge yourself</div><div class="dp-challenge">${dp.challenge}</div>`:''}
+    </div>`:''}`;
+  const done=$('m-done');
+  const days=ST.plan.daily.map(t=>t.day);
+  const minDay=days[0],maxDay=days[days.length-1];
+  done.className='done-btn'+(isDone?' on':'');
+  done.innerHTML=isDone?'&#10003; Day '+d+' complete':'Mark day '+d+' complete';
+  $('m-prev').disabled=d<=minDay;
+  $('m-next').disabled=d>=maxDay;
+}
+function pickAlt(d,i){ST.alt[d]=i;save();renderModal();}
+function toggleDeepen(){ST.deepenOpen=!ST.deepenOpen;renderModal();}
+function togDayModal(){
+  const d=ST.openDay;
+  ST.doneD.has(d)?ST.doneD.delete(d):ST.doneD.add(d);
+  save();renderModal();
+  checkCompletion();
+}
+function modalNav(dir){
+  const days=ST.plan.daily.map(t=>t.day);
+  const cur=days.indexOf(ST.openDay);
+  const next=cur+dir;
+  if(next>=0&&next<days.length){ST.openDay=days[next];ST.deepenOpen=false;renderModal();}
+}
+
+// ── WEEKLY ────────────────────────────────────────
+function renderWeekly(){
+  const weekOffset={30:0,60:4,90:8}[ST.ms];
+  $('panel-weekly').innerHTML=ST.plan.weekly.map((t,idx)=>`
+    <div class="wk-sep">Week ${idx+1} of ${ST.plan.weekly.length}</div>
+    <div class="w-card${ST.doneW.has(t.week)?' done-w':''}${ST.wex===t.week?' exp':''}" id="wc${t.week}">
+      <div class="w-hdr" onclick="exW(${t.week})">
+        <div class="w-chk${ST.doneW.has(t.week)?' on':''}" onclick="event.stopPropagation();togW(${t.week})">
+          ${ST.doneW.has(t.week)?'<svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="#27500A" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>':''}
+        </div>
+        <div class="w-name">${t.title}</div>
+        <div class="w-arr">&#9660;</div>
+      </div>
+      ${ST.wex===t.week?`<div class="w-body">
+        <div class="why-l" style="margin-top:.625rem">Why this focus</div>
+        <div class="why-t">${t.why}</div>
+        <div class="acct">&#128204; ${t.acct}</div>
+      </div>`:''}
+    </div>`).join('');
+}
+function exW(w){ST.wex=ST.wex===w?null:w;renderWeekly();}
+function togW(w){ST.doneW.has(w)?ST.doneW.delete(w):ST.doneW.add(w);save();renderWeekly();updateTotal();}
+
+// ── MONTHLY ───────────────────────────────────────
+function renderMonthly(){
+  const m=ST.plan.monthly;
+  $('panel-monthly').innerHTML=`<div class="mo-wrap">
+    <div class="badge">&#9733; Monthly intention</div>
+    <div class="mo-title">${m.title}</div>
+    <div class="why-l">Why this matters</div>
+    <div class="why-t">${m.why}</div>
+    <div class="acct">&#128204; ${m.acct}</div>
+    <button class="commit-btn${ST.doneM?' done':''}" onclick="togM()">
+      ${ST.doneM?'&#10003; Committed to this intention':'Commit to this intention'}
+    </button>
+  </div>`;
+}
+function togM(){ST.doneM=!ST.doneM;save();renderMonthly();updateTotal();}
+
+// ── SEGMENT COMPLETION ─────────────────────────────
+function checkCompletion(){
+  if(!ST.plan||ST.ms===90)return; // no "next" after 61–90
+  const milestoneDay={30:30,60:60}[ST.ms];
+  if(ST.doneD.has(milestoneDay))showCompletion();
+}
+
+function showCompletion(){
+  const next={30:60,60:90}[ST.ms];
+  const nextLabel={30:'Days 31–60',60:'Days 61–90'}[ST.ms];
+  const nextTheme={30:'Building',60:'Momentum'}[ST.ms];
+
+  const headings={
+    30:'30 days.\nYou showed up.',
+    60:'60 days.\nYou stayed.'
+  };
+  const bodies={
+    30:"A month of recovery. However it looked — the hard days, the missed days, the days you barely made it through — you kept going. Day 30 is here, and so are you. That's what matters.",
+    60:"Two months in. Not every day was perfect and it didn't need to be. What counts is that you're still here, still moving, still choosing this. You've built something real — now take it further."
+  };
+  const subs={
+    30:"When you're ready, the next 30 days are waiting. They'll build on everything you've just done.",
+    60:"The final stretch. Days 61–90 are where everything you've built becomes something you carry for life."
+  };
+
+  document.getElementById('co-confetti').textContent = ST.ms===30 ? '🌱 ✨ 🌱' : '🔥 ✨ 🔥';
+  document.getElementById('co-heading').textContent = headings[ST.ms];
+  document.getElementById('co-heading').style.whiteSpace = 'pre-line';
+  document.getElementById('co-body').textContent = bodies[ST.ms];
+  document.getElementById('co-sub').textContent = subs[ST.ms];
+  document.getElementById('co-next-btn').textContent = 'Continue to ' + nextLabel + ' →';
+  document.getElementById('completion-overlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function advanceToNextSegment(){
+  const next={30:60,60:90}[ST.ms];
+  if(!next)return;
+  // Carry answers forward, reset only the per-segment state
+  ST.ms=next;
+  ST.doneD=new Set();
+  ST.doneW=new Set();
+  ST.doneM=false;
+  ST.alt={};
+  ST.openDay=null;
+  ST.wex=null;
+  ST.deepenOpen=false;
+  document.getElementById('completion-overlay').style.display='none';
+  document.body.style.overflow='';
+  // Rebuild plan for new segment with same answers
+  buildPlan();
+  // Scroll to top
+  window.scrollTo(0,0);
+}
+
+function dismissCompletion(){
+  document.getElementById('completion-overlay').style.display='none';
+  document.body.style.overflow='';
+}
+</script>
+</body>
+</html>
